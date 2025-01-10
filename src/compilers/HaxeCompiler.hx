@@ -5,6 +5,7 @@ import sys.io.File;
 import sys.FileSystem;
 import src.JsonFile;
 import src.SlushiUtils;
+import src.Main;
 
 class HaxeCompiler {
 	static var jsonFile:JsonStruct = JsonFile.getJson();
@@ -16,8 +17,6 @@ class HaxeCompiler {
 			SlushiUtils.printMsg("Error loading [hxCompileUConfig.json]", "error");
 			return;
 		}
-
-		SlushiUtils.printMsg("Trying to compile Haxe project...", "processing");
 
 		// Check if all required fields are set
 		if (jsonFile.haxeConfig.sourceDir == "") {
@@ -38,7 +37,7 @@ class HaxeCompiler {
 			return;
 		}
 
-
+		SlushiUtils.printMsg("Trying to compile Haxe project...", "processing");
 
 		SlushiUtils.printMsg('Creating [${hxmlFileName}.hxml]', "processing");
 		// make a temporal HXML
@@ -54,12 +53,12 @@ class HaxeCompiler {
             ';
 
 			// ${parseLibs()}
-            // ${parseDefines()}
+			// ${parseDefines()}
 
+			// delete temporal hxml if already exists
 			if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml')) {
-				// delete temporal hxml if already exists
 				FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml');
-				SlushiUtils.printMsg("Deleted [${hxmlFileName}.hxml]", "info");
+				SlushiUtils.printMsg("Deleted existing [${hxmlFileName}.hxml]", "info");
 			}
 			File.saveContent(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml', hxml);
 		} catch (e) {
@@ -70,22 +69,27 @@ class HaxeCompiler {
 
 		SlushiUtils.printMsg('Created [${hxmlFileName}.hxml]', "success");
 		SlushiUtils.printMsg("Compiling Haxe project...\n", "info");
-		var compileProcess = null;
 
+		var compileProcess = null;
 		if (jsonFile.haxeConfig.debugMode) {
 			compileProcess = Sys.command("haxe", ['${hxmlFileName}.hxml', '--debug']);
 		} else {
 			compileProcess = Sys.command("haxe", ['${hxmlFileName}.hxml']);
 		}
-		
 		if (compileProcess != 0) {
 			SlushiUtils.printMsg("Compilation failed", "error", "\n");
 			exitCodeNum = 2;
 		}
-		
+
 		// delete temporal hxml
-		if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml')) {
-		    FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml');
+		if (jsonFile.deleteTempFiles == true) {
+			if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml')) {
+				FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml');
+			}
+		}
+
+		if (exitCodeNum == 0) {
+			SlushiUtils.printMsg("Compilation successful", "success", "\n");
 		}
 	}
 
@@ -93,8 +97,12 @@ class HaxeCompiler {
 		return exitCodeNum;
 	}
 
-	static function parseLibs() {
+	static function parseLibs():String {
 		var libs = "";
+
+		if (jsonFile.haxeConfig.hxLibs == null || jsonFile.haxeConfig.hxLibs.length == 0) {
+			return "";
+		}
 
 		for (i in 0...jsonFile.haxeConfig.hxLibs.length) {
 			libs += "-lib " + jsonFile.haxeConfig.hxLibs[i] + "\n";
@@ -103,8 +111,12 @@ class HaxeCompiler {
 		return libs;
 	}
 
-	static function parseDefines() {
+	static function parseDefines():String {
 		var defines = "";
+
+		if (jsonFile.haxeConfig.hxDefines == null || jsonFile.haxeConfig.hxDefines.length == 0) {
+			return "";
+		}
 
 		for (i in 0...jsonFile.haxeConfig.hxDefines.length) {
 			defines += "-D " + jsonFile.haxeConfig.hxDefines[i] + "\n";

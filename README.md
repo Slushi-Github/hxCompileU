@@ -3,7 +3,9 @@
 
 Using this small utility you can compile code from Haxe to PowerPC and finally the Nintendo Wii U using DevKitPro and [reflaxe.CPP](https://github.com/SomeRanDev/reflaxe.CPP).
 
-Please note, it is still missing the possibility to use the WUT toolchain to really make use of the Wii U features! 
+Please note that the ability to use the WUT toolchain to take full advantage of the Wii U features is still missing. 
+But, development has already started: [hxWUT](https://github.com/Slushi-Github/hxWUT)
+It is still incomplete and untested.
 
 ## How?
 The magic really comes from [reflaxe.CPP](https://github.com/SomeRanDev/reflaxe.CPP), being an alternative to [HXCPP](https://github.com/HaxeFoundation/hxcpp) when you want to compile Haxe to C++.
@@ -13,8 +15,8 @@ This project is simple, **yet incomplete**. Using it creates a JSON file that co
 When compiling, first you compile the Haxe side, then you use a MakeFile to finish the compilation and bring it to the Wii U.
 
 ## Why?
-Well, ever since I got a Nintendo Wii U a while ago I've been interested in bringing Haxe to this console. 
-Officially it's not possible due to mostly Nintendo NDA (Non-Disclosure Agreement) issues, and that you can actually even develop for this console.
+Well, since I got a Nintendo Wii U a while ago I've been interested in bringing Haxe to this console. 
+Officially it's not possible mainly due to Nintendo NDA (Non-Disclosure Agreement) issues, and that actually it can't even be developed for this console anymore.
 
 So... why not experiment to do it taking advantage of the homebrew that exists for the Wii U? hehe! well this is the project for it!
 
@@ -22,7 +24,7 @@ So... why not experiment to do it taking advantage of the homebrew that exists f
 
 You need [DevKitPro](https://devkitpro.org/wiki/Getting_Started), in addition to DevKitPPC and [WUT](https://github.com/devkitPro/wut).
 
-First, you need compilate this project.
+First, you need compilate this project, or you can use the precompiled version that is in the [releases](https://github.com/Slushi-Github/hxCompileU/releases).
 
 ```bash
 # Just clone the repository
@@ -35,10 +37,10 @@ haxe build.hxml
 
 After that, you will get your executable “haxeCompileU” in the ``output`` folder, for the moment, copy it to the root of the project you need it.
 
-### First, initialize your project, that is, create the configuration JSON file that HxCompileU will use, you can create it using this command:
+#### First, initialize your project, that is, create the configuration JSON file that HxCompileU will use, you can create it using this command:
 ``{haxeCompileUProgram} --prepare``
 
-### Once you have configured your JSON file to what your project needs, you can use the following command to compile it:
+#### Once you have configured your JSON file to what your project needs, you can use the following command to compile it:
 ``{haxeCompileUProgram} --compile``
 
 If you want to compile only Haxe but not to Wii U, you can use the following command:

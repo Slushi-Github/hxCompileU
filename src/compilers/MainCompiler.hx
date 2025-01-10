@@ -2,36 +2,27 @@ package src.compilers;
 
 import src.SlushiUtils;
 import src.compilers.CafeCompiler;
+import src.compilers.HaxeCompiler;
 
 class MainCompiler {
     public static function start(arg2:String):Void {
+
+		if (SlushiUtils.parseVersion(Main.version) < SlushiUtils.parseVersion(JsonFile.getJson().programVersion)
+			|| SlushiUtils.parseVersion(Main.version) > SlushiUtils.parseVersion(JsonFile.getJson().programVersion)) {
+			SlushiUtils.printMsg("The current version of HxCompileU is not the same as the one in the JSON file, this may cause problems, consider checking that file.\n",
+				"warning");
+		}
+
         SlushiUtils.printMsg("Starting...", "info");
 
         if (arg2 == "--onlyHaxe") {
             HaxeCompiler.init();
-            if (HaxeCompiler.getExitCode() != 0) {
-                SlushiUtils.printMsg("Compilation failed", "error");
-                SlushiUtils.printMsg(SlushiUtils.getExitCodeExplanation(HaxeCompiler.getExitCode()), "info");
-            }
             return;
         }
 
         // First compile Haxe part, then Wii U part
         HaxeCompiler.init();
-		if (HaxeCompiler.getExitCode() != 0) {
-			SlushiUtils.printMsg("Compilation failed in Haxe part, Wii U part will be skipped", "error");
-			SlushiUtils.printMsg(SlushiUtils.getExitCodeExplanation(HaxeCompiler.getExitCode()), "info");
-			return;
-		}
-
         Sys.sleep(2);
-        SlushiUtils.printMsg("\n", "none");
-
         CafeCompiler.init();
-        if (CafeCompiler.getExitCode() != 0) {
-            SlushiUtils.printMsg("Compilation failed in Wii U part", "error");
-            SlushiUtils.printMsg(SlushiUtils.getExitCodeExplanation(CafeCompiler.getExitCode()), "info");
-            return;
-        }
     }
 }

@@ -26,10 +26,16 @@ class SlushiUtils {
 		return Sys.getCwd().replace("\\", "/");
 	}
 
+	public static function parseVersion(version:String):Int {
+		var parts = version.split(".");
+		var major = Std.parseInt(parts[0]);
+		var minor = parts.length > 1 ? Std.parseInt(parts[1]) : 0;
+		var patch = parts.length > 2 ? Std.parseInt(parts[2]) : 0;
+		return (major * 10000) + (minor * 100) + patch; // Ej: "1.2.3" -> 10203
+	}
+
 	public static function getExitCodeExplanation(number:Int):String {
 		switch (number) {
-			case 0:
-				return "Compilation successful in Haxe part and/or Wii U part";
 			case 1:
 				return "Compilation failed in Haxe part";
 			case 2:

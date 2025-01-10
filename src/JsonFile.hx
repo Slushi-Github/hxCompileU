@@ -3,6 +3,8 @@ package src;
 import haxe.Json;
 import sys.io.File;
 import sys.FileSystem;
+import src.SlushiUtils;
+import src.Main;
 
 typedef HaxeConfig = {
 	sourceDir:String,
@@ -14,15 +16,25 @@ typedef HaxeConfig = {
 	hxDefines:Array<String>,
 }
 
-typedef WiiUMakeConfing = {
+typedef CMakeConfing = {
+	appImage:String,
+	tvImage:String,
+	gamepadImage:String,
+}
+
+typedef WiiUonfing = {
 	projectName:String,
 	makeDefines:Array<String>,
 	makeLibs:Array<String>,
+	// useCMake:Bool,
+	// cmakeConfig:CMakeConfing,
 }
 
 typedef JsonStruct = {
+	programVersion:String,
 	haxeConfig:HaxeConfig,
-	wiiuMakeConfig:WiiUMakeConfing,
+	wiiuConfig:WiiUonfing,
+	deleteTempFiles:Bool,
 }
 
 class JsonFile {
@@ -32,20 +44,28 @@ class JsonFile {
 				var jsonContent:Dynamic = Json.parse(File.getContent(SlushiUtils.getPathFromCurrentTerminal() + "/hxCompileUConfig.json"));
 
 				var jsonStructure:JsonStruct = {
+					programVersion: jsonContent.programVersion,
 					haxeConfig: {
 						sourceDir: jsonContent.haxeConfig.sourceDir,
 						hxMain: jsonContent.haxeConfig.hxMain,
 						outDir: jsonContent.haxeConfig.outDir,
 						reportErrorStyle: jsonContent.haxeConfig.reportErrorStyle,
-						debugMode: jsonContent.debugMode,
+						debugMode: jsonContent.haxeConfig.debugMode,
 						hxLibs: jsonContent.haxeConfig.hxLibs,
 						hxDefines: jsonContent.haxeConfig.hxDefines,
 					},
-					wiiuMakeConfig: {
-						projectName: jsonContent.wiiuMakeConfig.projectName,
-						makeDefines: jsonContent.wiiuMakeConfig.makeDefines,
-						makeLibs: jsonContent.wiiuMakeConfig.makeLibs,
-					}
+					wiiuConfig: {
+						projectName: jsonContent.wiiuConfig.projectName,
+						makeDefines: jsonContent.wiiuConfig.makeDefines,
+						makeLibs: jsonContent.wiiuConfig.makeLibs,
+						// useCMake: jsonContent.wiiuConfig.useCMake,
+						// cmakeConfig: {
+						// 	appImage: jsonContent.wiiuConfig.cmakeConfig.appImage,
+						// 	tvImage: jsonContent.wiiuConfig.cmakeConfig.tvImage,
+						// 	gamepadImage: jsonContent.wiiuConfig.cmakeConfig.gamepadImage,
+						// },
+					},
+					deleteTempFiles: jsonContent.wiiuConfig.deleteTempFiles,
 				};
 				return jsonStructure;
 			}
@@ -64,6 +84,7 @@ class JsonFile {
 		SlushiUtils.printMsg("Creating [hxCompileUConfig.json]", "processing");
 
 		var jsonStructure:JsonStruct = {
+			programVersion: Main.version,
 			haxeConfig: {
 				sourceDir: "source",
 				hxMain: "Main",
@@ -73,11 +94,18 @@ class JsonFile {
 				hxLibs: [],
 				hxDefines: [],
 			},
-			wiiuMakeConfig: {
+			wiiuConfig: {
 				projectName: "project",
 				makeDefines: [],
 				makeLibs: [],
-			}
+				// useCMake: false,
+				// cmakeConfig: {
+				// 	appImage: "",
+				// 	tvImage: "",
+				// 	gamepadImage: "",
+				// },
+			},
+			deleteTempFiles: true,
 		};
 
 		try {
@@ -97,11 +125,16 @@ class JsonFile {
 					if (data != null) {
 						return data;
 					}
-				case "wiiuMakeConfig":
-					data = Reflect.getProperty(jsonStructure.wiiuMakeConfig, variableName);
+				case "wiiuConfig":
+					data = Reflect.getProperty(jsonStructure.wiiuConfig, variableName);
 					if (data != null) {
 						return data;
 					}
+				// case "cmakeConfig":
+				// 	data = Reflect.getProperty(jsonStructure.wiiuConfig.cmakeConfig, variableName);
+				// 	if (data != null) {
+				// 		return data;
+				// 	}
 				default:
 					return null;
 			}
