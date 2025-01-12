@@ -3,7 +3,7 @@ package src;
 using StringTools;
 
 class SlushiUtils {
-	public static function printMsg(text:String, alertType:String, prefix:String = ""):Void {
+	public static function printMsg(text:Dynamic, alertType:String, prefix:String = ""):Void {
 		switch (alertType) {
 			case "error":
 				Sys.println(prefix + "\x1b[38;5;1m[ERROR]\033[0m " + text);
@@ -12,11 +12,11 @@ class SlushiUtils {
 			case "success":
 				Sys.println(prefix + "\x1b[38;5;2m[SUCCESS]\033[0m " + text);
 			case "info":
-				Sys.println("\x1b[38;5;7m[INFO]\033[0m " + text);
+				Sys.println(prefix + "\x1b[38;5;7m[INFO]\033[0m " + text);
 			case "processing":
-				Sys.println("\x1b[38;5;24m[PROCESSING]\033[0m " + text);
+				Sys.println(prefix + "\x1b[38;5;24m[PROCESSING]\033[0m " + text);
 			case "none":
-				Sys.println(text);
+				Sys.println(prefix + text);
 			default:
 				Sys.println(text);
 		}

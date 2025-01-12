@@ -4,7 +4,7 @@ import src.SlushiUtils;
 import src.compilers.MainCompiler;
 
 class Main {
-	public static var version:String = "1.0.0";
+	public static var version:String = "1.1.0";
 	static var stdin = Sys.stdin();
 	static var stdout = Sys.stdout();
 	static var args = Sys.args();

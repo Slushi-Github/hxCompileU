@@ -3,4 +3,4 @@
 -cpp export
 -D HAXE_OUTPUT_PART=haxeCompileU
 --resource templates/makefileSimpleAppWUT@cafeMakefileWUT
--lib hxcpp-debug-server
+# -lib hxcpp-debug-server

@@ -12,7 +12,6 @@ typedef HaxeConfig = {
 	outDir:String,
 	reportErrorStyle:String,
 	debugMode:Bool,
-	hxLibs:Array<String>,
 	hxDefines:Array<String>,
 }
 
@@ -24,8 +23,6 @@ typedef CMakeConfing = {
 
 typedef WiiUonfing = {
 	projectName:String,
-	makeDefines:Array<String>,
-	makeLibs:Array<String>,
 	// useCMake:Bool,
 	// cmakeConfig:CMakeConfing,
 }
@@ -35,6 +32,7 @@ typedef JsonStruct = {
 	haxeConfig:HaxeConfig,
 	wiiuConfig:WiiUonfing,
 	deleteTempFiles:Bool,
+	extraLibs:Array<String>,
 }
 
 class JsonFile {
@@ -51,13 +49,10 @@ class JsonFile {
 						outDir: jsonContent.haxeConfig.outDir,
 						reportErrorStyle: jsonContent.haxeConfig.reportErrorStyle,
 						debugMode: jsonContent.haxeConfig.debugMode,
-						hxLibs: jsonContent.haxeConfig.hxLibs,
 						hxDefines: jsonContent.haxeConfig.hxDefines,
 					},
 					wiiuConfig: {
 						projectName: jsonContent.wiiuConfig.projectName,
-						makeDefines: jsonContent.wiiuConfig.makeDefines,
-						makeLibs: jsonContent.wiiuConfig.makeLibs,
 						// useCMake: jsonContent.wiiuConfig.useCMake,
 						// cmakeConfig: {
 						// 	appImage: jsonContent.wiiuConfig.cmakeConfig.appImage,
@@ -66,6 +61,7 @@ class JsonFile {
 						// },
 					},
 					deleteTempFiles: jsonContent.wiiuConfig.deleteTempFiles,
+					extraLibs: jsonContent.extraLibs,
 				};
 				return jsonStructure;
 			}
@@ -91,13 +87,10 @@ class JsonFile {
 				outDir: "output",
 				reportErrorStyle: "pretty",
 				debugMode: false,
-				hxLibs: [],
 				hxDefines: [],
 			},
 			wiiuConfig: {
 				projectName: "project",
-				makeDefines: [],
-				makeLibs: [],
 				// useCMake: false,
 				// cmakeConfig: {
 				// 	appImage: "",
@@ -106,6 +99,7 @@ class JsonFile {
 				// },
 			},
 			deleteTempFiles: true,
+			extraLibs: [],
 		};
 
 		try {

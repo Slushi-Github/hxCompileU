@@ -42,13 +42,13 @@ CXXFLAGS	:=	$(CFLAGS)
 ASFLAGS		:=	-g $(MACHDEP)
 LDFLAGS		:=	-g $(MACHDEP) $(RPXSPECS) -Wl,-Map,$(notdir $*.map)
 
-LIBS		:=	-lwut
+LIBS		:=	-lwut [LIBS]
 
 #-------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level
 # containing include and lib
 #-------------------------------------------------------------------------------
-LIBDIRS		:=	$(PORTLIBS) $(WUT_ROOT)
+LIBDIRS		:=	$(PORTLIBS) $(WUT_ROOT) $(WUMS_ROOT)
 
 
 #-------------------------------------------------------------------------------

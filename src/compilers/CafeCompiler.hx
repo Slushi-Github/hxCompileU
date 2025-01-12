@@ -46,8 +46,8 @@ class CafeCompiler {
 			makefileContent = makefileContent.replace("[SOURCE_DIR]", jsonFile.haxeConfig.outDir + "/" + jsonFile.haxeConfig.sourceDir);
 			makefileContent = makefileContent.replace("[INCLUDE_DIR]", jsonFile.haxeConfig.outDir + "/include");
 			// makefileContent = makefileContent.replace("[BUILD_DIR]", jsonFile.haxeConfig.outDir + "/makeFiles");
-			// makefileContent = makefileContent.replace("{[DEFINES]}", parseMakeDefines());
-			// makefileContent = makefileContent.replace("{[LIBS]}", parseMakeLibs());
+			// makefileContent = makefileContent.replace("[DEFINES]", parseMakeDefines());
+			makefileContent = makefileContent.replace("[LIBS]", parseMakeLibs());
 
 			if (!FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles")) {
 				FileSystem.createDirectory(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles");
@@ -102,28 +102,10 @@ class CafeCompiler {
 	static function parseMakeLibs():String {
 		var libs = "";
 
-		if (jsonFile.wiiuConfig.makeLibs == null || jsonFile.wiiuConfig.makeLibs.length == 0) {
-			return "";
-		}
-
-		for (i in 0...jsonFile.wiiuConfig.makeLibs.length) {
-			libs += " -l" + jsonFile.wiiuConfig.makeLibs[i];
+		for (lib in Libs.parseMakeLibs()) {
+			libs += lib + " ";
 		}
 
 		return libs;
-	}
-
-	static function parseMakeDefines():String {
-		var defines = "";
-
-		if (jsonFile.wiiuConfig.makeDefines == null || jsonFile.wiiuConfig.makeDefines.length == 0) {
-			return "";
-		}
-
-		for (i in 0...jsonFile.wiiuConfig.makeDefines.length) {
-			defines += " -D" + jsonFile.wiiuConfig.makeDefines[i];
-		}
-
-		return defines;
 	}
 }
