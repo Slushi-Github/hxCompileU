@@ -4,9 +4,10 @@
 Using this small utility you can compile code from Haxe to PowerPC and finally the Nintendo Wii U using DevKitPro and [reflaxe.CPP](https://github.com/SomeRanDev/reflaxe.CPP).
 
 Currently supported libraries to be used in conjunction with HxCompileU:
-    - [hxWUT](https://github.com/Slushi-Github/hxWUT): the toolchain or SDK used to create homebrew on the Wii U.
-    - [hxLibNotifications](https://github.com/Slushi-Github/hxLibNotifications): a library to create notifications on the Wii U (Useful for mostly plugins).
-    - [hxLibMappedMemory](https://github.com/Slushi-Github/hxLibMappedMemory): a library to create mapped memory on the Wii U.
+
+- [hxWUT](https://github.com/Slushi-Github/hxWUT): the toolchain or SDK used to create homebrew on the Wii U.
+- [hxLibNotifications](https://github.com/Slushi-Github/hxLibNotifications): a library to create notifications on the Wii U (Useful for mostly plugins).
+- [hxLibMappedMemory](https://github.com/Slushi-Github/hxLibMappedMemory): a library to create mapped memory on the Wii U.
 
 ## How?
 The magic really comes from [reflaxe.CPP](https://github.com/SomeRanDev/reflaxe.CPP), being an alternative to [HXCPP](https://github.com/HaxeFoundation/hxcpp) when you want to compile Haxe to C++.
