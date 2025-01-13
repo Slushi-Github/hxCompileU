@@ -24,7 +24,7 @@ So... why not experiment to do it taking advantage of the homebrew that exists f
 
 You need [DevKitPro](https://devkitpro.org/wiki/Getting_Started), in addition to DevKitPPC and [WUT](https://github.com/devkitPro/wut).
 
-First, you need compilate this project, or you can use the precompiled version that is in the [releases](https://github.com/Slushi-Github/hxCompileU/releases).
+First, you need compilate this project, or you can use the precompiled version that is in the [releases](https://github.com/Slushi-Github/hxCompileU/releases), or you can download it from the [GitHub Actions](https://github.com/Slushi-Github/hxCompileU/actions).
 
 ```bash
 # Just clone the repository
