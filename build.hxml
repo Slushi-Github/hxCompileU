@@ -4,3 +4,4 @@
 -D HAXE_OUTPUT_PART=haxeCompileU
 --resource templates/makefileSimpleAppWUT@cafeMakefileWUT
 # -lib hxcpp-debug-server
+-D report-error-style=pretty

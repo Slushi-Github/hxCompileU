@@ -8,12 +8,15 @@ Currently supported libraries to be used in conjunction with HxCompileU:
 - [hxWUT](https://github.com/Slushi-Github/hxWUT): the toolchain or SDK used to create homebrew on the Wii U.
 - [hxLibNotifications](https://github.com/Slushi-Github/hxLibNotifications): a library to create notifications on the Wii U (Useful for mostly plugins).
 - [hxLibMappedMemory](https://github.com/Slushi-Github/hxLibMappedMemory): a library to create mapped memory on the Wii U.
+- [SlushiUtilsU](https://github.com/Slushi-Github/slushiUtilsU): a library to facilitate the use of certain Wii U libraries.
 
 ## How?
 The magic really comes from [reflaxe.CPP](https://github.com/SomeRanDev/reflaxe.CPP), being an alternative to [HXCPP](https://github.com/HaxeFoundation/hxcpp) when you want to compile Haxe to C++.
 By default, if you would try to make Haxe with HXCPP compile to PPC... the results are not nice, there are many errors. With reflaxe.CPP we avoid this because it generates a cleaner code without dependencies!
 
-This project is simple, **yet incomplete**. Using it creates a JSON file that contains all the basics for a Haxe compilation and a few other things that would go in the MakeFile.
+This project is simple, **yet incomplete**. 
+
+Using it creates a JSON file that contains all the basics for a Haxe compilation and a few other things that would go in the MakeFile.
 When compiling, first you compile the Haxe side, then you use a MakeFile to finish the compilation and bring it to the Wii U.
 
 ## Why?
@@ -37,7 +40,7 @@ cd hxCompileU
 haxe build.hxml
 ```
 
-After that, you will get your executable “haxeCompileU” in the ``output`` folder, for the moment, copy it to the root of the project you need it.
+After that, you will get your executable “haxeCompileU” in the ``export`` folder, for the moment, copy it to the root of the project you need it.
 
 #### First, initialize your project, that is, create the configuration JSON file that HxCompileU will use, you can create it using this command:
 ``{haxeCompileUProgram} --prepare``

@@ -54,14 +54,18 @@ class HaxeCompiler {
 	-D mainClass=${jsonFile.haxeConfig.hxMain}
 	# Extra Libs
 	${finalHxLibs()}
+	# Extra defines
+	${finalHxDefines()}
+	# Extra options
+	${finalOtherOptions()}
 ';
 
-			// delete temporal hxml if already exists
-			if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml')) {
-				FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml');
-				SlushiUtils.printMsg('Deleted existing [${hxmlFileName}.hxml]', "info");
-			}
-			File.saveContent(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml', hxml);
+		// delete temporal hxml if already exists
+		if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml')) {
+			FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml');
+			SlushiUtils.printMsg('Deleted existing [${hxmlFileName}.hxml]', "info");
+		}
+		File.saveContent(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml', hxml);
 		} catch (e) {
 			SlushiUtils.printMsg('Error creating [${hxmlFileName}.hxml]: ${e}', "error");
 			exitCodeNum = 4;
@@ -106,5 +110,25 @@ class HaxeCompiler {
 		}
 
 		return libs;
+	}
+
+	static function finalHxDefines():String {
+		var defines = "";
+
+		for (define in Defines.parseHXDefines()) {
+			defines += define + "\n";
+		}
+
+		return defines;
+	}
+
+	static function finalOtherOptions():String {
+		var options = "";
+
+		for (option in Defines.parseOtherOptions()) {
+			options += option + "\n";
+		}
+
+		return options;
 	}
 }

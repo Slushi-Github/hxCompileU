@@ -8,6 +8,8 @@ import src.JsonFile;
 import src.compilers.CafeCompiler;
 import src.compilers.HaxeCompiler;
 import src.compilers.MainCompiler;
+import src.utils.Defines;
+import src.utils.Libs;
 
 import src.JsonFile.HaxeConfig;
 import src.JsonFile.WiiUonfing;

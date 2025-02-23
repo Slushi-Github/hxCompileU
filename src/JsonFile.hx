@@ -13,6 +13,7 @@ typedef HaxeConfig = {
 	reportErrorStyle:String,
 	debugMode:Bool,
 	hxDefines:Array<String>,
+	othersOptions:Array<String>,
 }
 
 typedef CMakeConfing = {
@@ -50,6 +51,7 @@ class JsonFile {
 						reportErrorStyle: jsonContent.haxeConfig.reportErrorStyle,
 						debugMode: jsonContent.haxeConfig.debugMode,
 						hxDefines: jsonContent.haxeConfig.hxDefines,
+						othersOptions: jsonContent.haxeConfig.othersOptions,
 					},
 					wiiuConfig: {
 						projectName: jsonContent.wiiuConfig.projectName,
@@ -60,7 +62,7 @@ class JsonFile {
 						// 	gamepadImage: jsonContent.wiiuConfig.cmakeConfig.gamepadImage,
 						// },
 					},
-					deleteTempFiles: jsonContent.wiiuConfig.deleteTempFiles,
+					deleteTempFiles: jsonContent.deleteTempFiles,
 					extraLibs: jsonContent.extraLibs,
 				};
 				return jsonStructure;
@@ -88,6 +90,7 @@ class JsonFile {
 				reportErrorStyle: "pretty",
 				debugMode: false,
 				hxDefines: [],
+				othersOptions: [],
 			},
 			wiiuConfig: {
 				projectName: "project",
@@ -108,31 +111,5 @@ class JsonFile {
 		} catch (e) {
 			SlushiUtils.printMsg("Error creating [hxCompileUConfig.json]: " + e, "error");
 		}
-	}
-
-	public static function getVariableFromJson(jsonStructure:JsonStruct, fieldName:String, variableName:String):Dynamic {
-		if (jsonStructure != null) {
-			var data:Dynamic = null;
-			switch (fieldName) {
-				case "haxeConfig":
-					data = Reflect.getProperty(jsonStructure.haxeConfig, variableName);
-					if (data != null) {
-						return data;
-					}
-				case "wiiuConfig":
-					data = Reflect.getProperty(jsonStructure.wiiuConfig, variableName);
-					if (data != null) {
-						return data;
-					}
-				// case "cmakeConfig":
-				// 	data = Reflect.getProperty(jsonStructure.wiiuConfig.cmakeConfig, variableName);
-				// 	if (data != null) {
-				// 		return data;
-				// 	}
-				default:
-					return null;
-			}
-		}
-		return null;
 	}
 }

@@ -13,9 +13,11 @@ class MainCompiler {
 		}
 
 		// check libs
-		if (Libs.check() == false) {
-			SlushiUtils.printMsg("Invalid libs, aborting...", "error");
-			return;
+		if (Libs.check() == FinalCheck.ERROR) {
+			SlushiUtils.printMsg("Invalid libs, but continuing...", "error");
+		}
+		else if (Libs.check() == FinalCheck.SKIP) {
+			SlushiUtils.printMsg("No extra libs found, but continuing...", "info");
 		}
 
 		SlushiUtils.printMsg("Starting...", "info");

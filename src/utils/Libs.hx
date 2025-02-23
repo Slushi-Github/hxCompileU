@@ -1,24 +1,31 @@
-package src;
+package src.utils;
+
+enum FinalCheck {
+	OK;
+	ERROR;
+	SKIP;
+}
 
 class Libs {
-	public static var validLibs:Map<String, Array<String>> = [
-		// "wut" => ["hxwut", "wut"],
-		"libnotifications" => ["hxlibnotifications", "notifications"],
-	];
-
+	public static var validLibs:Map<String, Array<String>> = ["libnotifications" => ["hxlibnotifications", "notifications"],
+		"slushiUtilsU" => ["slushiUtilsU", "None"],];
 	static var jsonFile:JsonStruct = JsonFile.getJson();
 
-	public static function check():Bool {
+	public static function check():FinalCheck {
+		if (jsonFile.extraLibs.length == 0) {
+			return SKIP;
+		}
+
 		for (lib in jsonFile.extraLibs) {
 			if (validLibs.exists(lib)) {
-				return true;
+				return OK;
 			} else {
 				SlushiUtils.printMsg("Invalid lib: " + lib, "error");
-				return false;
+				return ERROR;
 			}
 		}
 
-		return false;
+		return ERROR;
 	}
 
 	public static function parseHXLibs():Array<String> {
@@ -36,6 +43,9 @@ class Libs {
 		var libs:Array<String> = [];
 
 		for (makeLib in jsonFile.extraLibs) {
+			if (validLibs.get(makeLib)[1] == "None") {
+				continue;
+			}
 			var finalMakeLib:String = validLibs.get(makeLib)[1];
 			libs.push("-l" + finalMakeLib);
 		}
