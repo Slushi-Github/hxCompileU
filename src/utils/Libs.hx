@@ -7,8 +7,14 @@ enum FinalCheck {
 }
 
 class Libs {
-	public static var validLibs:Map<String, Array<String>> = ["libnotifications" => ["hxlibnotifications", "notifications"],
-		"slushiUtilsU" => ["slushiUtilsU", "None"],];
+	public static var validLibs:Map<String, Array<Array<String>>> = [
+		"libnotifications" => [["hxlibnotifications"], ["notifications"]],
+		"slushiUtilsU" => [["slushiUtilsU"], ["None"]],
+		"SDL2" => [["None"], ["SDL2_mixer", "SDL2_image", "SDL2_ttf", "SDL2_gfx", "SDL2", "vorbisfile", "vorbis", "ogg", "ogg", "mpg123", "modplug"]]
+	];
+
+	// HxSDLU
+
 	static var jsonFile:JsonStruct = JsonFile.getJson();
 
 	public static function check():FinalCheck {
@@ -32,7 +38,12 @@ class Libs {
 		var libs:Array<String> = [];
 
 		for (hxLib in jsonFile.extraLibs) {
-			var finalHxLib:String = validLibs.get(hxLib)[0];
+
+			if (validLibs.get(hxLib)[0][0] == "None") {
+				continue;
+			}
+
+			var finalHxLib:String = validLibs.get(hxLib)[0][0];
 			libs.push("-lib " + finalHxLib);
 		}
 
@@ -43,11 +54,13 @@ class Libs {
 		var libs:Array<String> = [];
 
 		for (makeLib in jsonFile.extraLibs) {
-			if (validLibs.get(makeLib)[1] == "None") {
+			if (validLibs.get(makeLib)[1][0] == "None") {
 				continue;
 			}
-			var finalMakeLib:String = validLibs.get(makeLib)[1];
-			libs.push("-l" + finalMakeLib);
+
+			for (lib in validLibs.get(makeLib)[1]) {
+				libs.push("-l" + lib);
+			}
 		}
 
 		return libs;

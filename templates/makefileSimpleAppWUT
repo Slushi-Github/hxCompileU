@@ -42,7 +42,7 @@ CXXFLAGS	:=	$(CFLAGS) -std=c++17
 ASFLAGS		:=	-g $(MACHDEP)
 LDFLAGS		:=	-g $(MACHDEP) $(RPXSPECS) -Wl,-Map,$(notdir $*.map)
 
-LIBS		:=	-lwut [LIBS]
+LIBS		:=	[LIBS] -lwut
 
 #-------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level

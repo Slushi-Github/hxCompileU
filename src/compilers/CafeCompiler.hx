@@ -20,8 +20,6 @@ class CafeCompiler {
 			return;
 		}
 
-		// SlushiUtils.printMsg("\n", "none");
-
 		if (jsonFile == null) {
 			SlushiUtils.printMsg("Error loading [hxCompileUConfig.json]", "error");
 			return;
@@ -45,20 +43,12 @@ class CafeCompiler {
 			makefileContent = makefileContent.replace("[PROJECT_NAME]", jsonFile.wiiuConfig.projectName);
 			makefileContent = makefileContent.replace("[SOURCE_DIR]", jsonFile.haxeConfig.outDir + "/" + jsonFile.haxeConfig.sourceDir);
 			makefileContent = makefileContent.replace("[INCLUDE_DIR]", jsonFile.haxeConfig.outDir + "/include");
-			// makefileContent = makefileContent.replace("[BUILD_DIR]", jsonFile.haxeConfig.outDir + "/makeFiles");
-			// makefileContent = makefileContent.replace("[DEFINES]", parseMakeDefines());
 			makefileContent = makefileContent.replace("[LIBS]", parseMakeLibs());
 
 			if (!FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles")) {
 				FileSystem.createDirectory(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles");
 			}
 			makefileContent = makefileContent.replace("[OUT_DIR]", jsonFile.haxeConfig.outDir + "/wiiuFiles");
-
-			// Why Haxe can't delete that directory? wtf
-			// delete build directory
-			// if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/build")) {
-			// 	FileSystem.deleteDirectory(SlushiUtils.getPathFromCurrentTerminal() + "/build");
-			// }
 
 			// Save Makefile
 			// delete temporal makefile if already exists
@@ -77,7 +67,14 @@ class CafeCompiler {
 
 		SlushiUtils.printMsg("Compiling to Wii U...\n", "processing");
 
+		var startTime:Float = Sys.time(); 
+
 		var compileProcess = Sys.command("make");
+
+		var endTime:Float = Sys.time(); 
+		var elapsedTime:Float = endTime - startTime; 
+		var formattedTime:String = StringTools.trim(Math.fround(elapsedTime * 10) / 10 + "s");
+
 		if (compileProcess != 0) {
 			SlushiUtils.printMsg("Compilation failed", "error", "\n");
 			exitCodeNum = 2;
@@ -91,7 +88,7 @@ class CafeCompiler {
 		}
 
 		if (exitCodeNum == 0) {
-			SlushiUtils.printMsg('Compilation successful. Check [${jsonFile.haxeConfig.outDir}/wiiuFiles]', "success", "\n");
+			SlushiUtils.printMsg('Compilation successful. Check [${jsonFile.haxeConfig.outDir}/wiiuFiles], compilation time: ${formattedTime}\n', "success", "\n");
 		}
 	}
 

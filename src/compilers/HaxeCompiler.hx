@@ -59,13 +59,12 @@ class HaxeCompiler {
 	# Extra options
 	${finalOtherOptions()}
 ';
-
-		// delete temporal hxml if already exists
-		if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml')) {
-			FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml');
-			SlushiUtils.printMsg('Deleted existing [${hxmlFileName}.hxml]', "info");
-		}
-		File.saveContent(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml', hxml);
+			// delete temporal hxml if already exists
+			if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml')) {
+				FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml');
+				SlushiUtils.printMsg('Deleted existing [${hxmlFileName}.hxml]', "info");
+			}
+			File.saveContent(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml', hxml);
 		} catch (e) {
 			SlushiUtils.printMsg('Error creating [${hxmlFileName}.hxml]: ${e}', "error");
 			exitCodeNum = 4;
@@ -73,7 +72,9 @@ class HaxeCompiler {
 		}
 
 		SlushiUtils.printMsg('Created [${hxmlFileName}.hxml]', "success");
-		SlushiUtils.printMsg("Compiling Haxe project...\n", "info");
+		SlushiUtils.printMsg("Compiling Haxe project...", "info");
+
+		var startTime:Float = Sys.time();
 
 		var compileProcess = null;
 		if (jsonFile.haxeConfig.debugMode) {
@@ -81,6 +82,11 @@ class HaxeCompiler {
 		} else {
 			compileProcess = Sys.command("haxe", ['${hxmlFileName}.hxml']);
 		}
+
+		var endTime:Float = Sys.time();
+		var elapsedTime:Float = endTime - startTime;
+		var formattedTime:String = StringTools.trim(Math.fround(elapsedTime * 10) / 10 + "s");
+
 		if (compileProcess != 0) {
 			SlushiUtils.printMsg("Compilation failed", "error", "\n");
 			exitCodeNum = 2;
@@ -94,7 +100,7 @@ class HaxeCompiler {
 		}
 
 		if (exitCodeNum == 0) {
-			SlushiUtils.printMsg("Compilation successful", "success", "\n");
+			SlushiUtils.printMsg('Compilation successful, compilation time: ${formattedTime}\n', "success");
 		}
 	}
 
