@@ -28,12 +28,18 @@ typedef WiiUonfing = {
 	// cmakeConfig:CMakeConfing,
 }
 
+typedef ConsoleSettings = {
+	sendProgramToConsole:Bool,
+	consoleIP:String,
+}
+
 typedef JsonStruct = {
 	programVersion:String,
 	haxeConfig:HaxeConfig,
 	wiiuConfig:WiiUonfing,
 	deleteTempFiles:Bool,
 	extraLibs:Array<String>,
+	// consoleSettings:ConsoleSettings,
 }
 
 class JsonFile {
@@ -64,6 +70,10 @@ class JsonFile {
 					},
 					deleteTempFiles: jsonContent.deleteTempFiles,
 					extraLibs: jsonContent.extraLibs,
+					// consoleSettings: {
+					// 	sendProgramToConsole: jsonContent.consoleSettings.sendProgramToConsole,
+					// 	consoleIP: jsonContent.consoleSettings.consoleIP,
+					// },
 				};
 				return jsonStructure;
 			}
@@ -103,6 +113,10 @@ class JsonFile {
 			},
 			deleteTempFiles: true,
 			extraLibs: [],
+			// consoleSettings: {
+			// 	sendProgramToConsole: false,
+			// 	consoleIP: "",
+			// },
 		};
 
 		try {

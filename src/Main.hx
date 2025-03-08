@@ -20,18 +20,23 @@ class Main {
 			SlushiUtils.printMsg('$hxcompileuString v$version -- Created by \033[96mSlushi\033[0m', "none");
 		}
 
-		switch (args[0]) {
-			case "--prepare":
-				JsonFile.createJson();
-			case "--compile":
-				MainCompiler.start(args[1]);
-			case "--version":
-				SlushiUtils.printMsg('$hxcompileuString v$version -- Created by \033[96mSlushi\033[0m', "none");
-			case "--help":
-				SlushiUtils.printMsg("Usage: hxCompileU [command]\nCommands:\n\t--prepare: Creates hxCompileUConfig.json\n\t--compile: Compiles the project (use \"--compile --onlyHaxe\" for compiling only the Haxe part)\n\t--version: Shows the version of the compiler\n\t--help: Shows this message", "none");
-			default:
-				SlushiUtils.printMsg("Invalid argument: " + args[0], "error");
-				return;
+		try {
+			switch (args[0]) {
+				case "--prepare":
+					JsonFile.createJson();
+				case "--compile":
+					MainCompiler.start(args[1]);
+				case "--version":
+					SlushiUtils.printMsg('$hxcompileuString v$version -- Created by \033[96mSlushi\033[0m', "none");
+				case "--help":
+					SlushiUtils.printMsg("Usage: hxCompileU [command]\nCommands:\n\t--prepare: Creates hxCompileUConfig.json\n\t--compile: Compiles the project (use \"--compile --onlyHaxe\" for compiling only the Haxe part)\n\t--version: Shows the version of the compiler\n\t--help: Shows this message",
+						"none");
+				default:
+					SlushiUtils.printMsg("Invalid argument: " + args[0], "error");
+					return;
+			}
+		} catch (e) {
+			SlushiUtils.printMsg("Unknown Error: " + e, "error");
 		}
 	}
 }
