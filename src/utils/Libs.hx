@@ -10,7 +10,8 @@ class Libs {
 	public static var validLibs:Map<String, Array<Array<String>>> = [
 		"libnotifications" => [["hxlibnotifications"], ["notifications"]],
 		"slushiUtilsU" => [["slushiUtilsU"], ["None"]],
-		"SDL2" => [["None"], ["SDL2_mixer", "SDL2_image", "SDL2_ttf", "SDL2_gfx", "SDL2", "vorbisfile", "vorbis", "ogg", "ogg", "mpg123", "modplug", "png", "jpeg", "z"]],
+		"SDL2" => [["hxsdl2"], ["SDL2_mixer", "SDL2_image", "SDL2_ttf", "SDL2_gfx", "SDL2", "vorbisfile", "vorbis", "ogg", "ogg", "mpg123", "modplug", "png", "jpeg", "z"]],
+		// EXPERIMENTAL:
 		"leafyEngine" => [["leafyengine"], ["None"]],
 	];
 
