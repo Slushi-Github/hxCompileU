@@ -30,7 +30,7 @@ class MainCompiler {
 			CafeCompiler.init();
 			return;
 		}
-		else if (arg2 != "--clean") {
+		else if (arg2 == "--clean") {
 			SlushiUtils.cleanBuild();
 		}
 
