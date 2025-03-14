@@ -2,20 +2,29 @@ package src;
 
 using StringTools;
 
+enum MsgType {
+	INFO;
+	SUCCESS;
+	WARN;
+	ERROR;
+	PROCESSING;
+	NONE;
+}
+
 class SlushiUtils {
-	public static function printMsg(text:Dynamic, alertType:String, prefix:String = ""):Void {
+	public static function printMsg(text:Dynamic, alertType:MsgType, prefix:String = ""):Void {
 		switch (alertType) {
-			case "error":
+			case ERROR:
 				Sys.println(prefix + "\x1b[38;5;1m[ERROR]\033[0m " + text);
-			case "warning":
+			case WARN:
 				Sys.println(prefix + "\x1b[38;5;3m[WARNING]\033[0m " + text);
-			case "success":
+			case SUCCESS:
 				Sys.println(prefix + "\x1b[38;5;2m[SUCCESS]\033[0m " + text);
-			case "info":
+			case INFO:
 				Sys.println(prefix + "\x1b[38;5;7m[INFO]\033[0m " + text);
-			case "processing":
+			case PROCESSING:
 				Sys.println(prefix + "\x1b[38;5;24m[PROCESSING]\033[0m " + text);
-			case "none":
+			case NONE:
 				Sys.println(prefix + text);
 			default:
 				Sys.println(text);
@@ -46,6 +55,22 @@ class SlushiUtils {
 				return "Error creating some file";
 			default:
 				return "Unknown error";
+		}
+	}
+
+	public static function cleanBuild():Void {
+		if (FileSystem.exists(getPathFromCurrentTerminal() + "/" + JsonFile.getJson().haxeConfig.outDir)) {
+			try {
+				FileSystem.deleteDirectory(getPathFromCurrentTerminal() + "/output");
+				SlushiUtils.printMsg("Deleted [" + JsonFile.getJson().haxeConfig.outDir + "] directory", SUCCESS);
+			}
+		}
+
+		if (FileSystem.exists(getPathFromCurrentTerminal() + "/build")) {
+			try {
+				FileSystem.deleteDirectory(getPathFromCurrentTerminal() + "/build");
+				SlushiUtils.printMsg("Deleted [build] directory", SUCCESS);
+			}
 		}
 	}
 }

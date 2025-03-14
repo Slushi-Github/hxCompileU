@@ -21,20 +21,20 @@ class CafeCompiler {
 		}
 
 		if (jsonFile == null) {
-			SlushiUtils.printMsg("Error loading [hxCompileUConfig.json]", "error");
+			SlushiUtils.printMsg("Error loading [hxCompileUConfig.json]", ERROR);
 			return;
 		}
 
 		// Check if all required fields are set
 		if (jsonFile.wiiuConfig.projectName == "") {
-			SlushiUtils.printMsg("projectName in [hxCompileUConfig.json -> wiiuConfig.projectName] is empty", "error");
+			SlushiUtils.printMsg("projectName in [hxCompileUConfig.json -> wiiuConfig.projectName] is empty", ERROR);
 			exitCodeNum = 3;
 			return;
 		}
 
-		SlushiUtils.printMsg("Trying to compile to Wii U project...", "processing");
+		SlushiUtils.printMsg("Trying to compile to Wii U project...", PROCESSING);
 
-		SlushiUtils.printMsg("Creating Makefile...", "processing");
+		SlushiUtils.printMsg("Creating Makefile...", PROCESSING);
 		// Create a temporal Makefile with all required fields
 		try {
 			// Prepare Makefile
@@ -44,6 +44,7 @@ class CafeCompiler {
 			makefileContent = makefileContent.replace("[SOURCE_DIR]", jsonFile.haxeConfig.outDir + "/" + jsonFile.haxeConfig.sourceDir);
 			makefileContent = makefileContent.replace("[INCLUDE_DIR]", jsonFile.haxeConfig.outDir + "/include");
 			makefileContent = makefileContent.replace("[LIBS]", parseMakeLibs());
+			makefileContent = makefileContent.replace("[DEFINES]", parseMakeDefines());
 
 			if (!FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles")) {
 				FileSystem.createDirectory(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles");
@@ -54,21 +55,20 @@ class CafeCompiler {
 			// delete temporal makefile if already exists
 			if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/Makefile")) {
 				FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + "/Makefile");
-				SlushiUtils.printMsg("Deleted existing [Makefile]", "info");
+				SlushiUtils.printMsg("Deleted existing [Makefile]", INFO);
 			}
 
 			File.saveContent(SlushiUtils.getPathFromCurrentTerminal() + "/Makefile", makefileContent);
-			SlushiUtils.printMsg("Created Makefile", "success");
+			SlushiUtils.printMsg("Created Makefile", SUCCESS);
 		} catch (e:Dynamic) {
-			SlushiUtils.printMsg("Error creating Makefile: " + e, "error");
+			SlushiUtils.printMsg("Error creating Makefile: " + e, ERROR);
 			exitCodeNum = 4;
 			return;
 		}
 
-		SlushiUtils.printMsg("Compiling to Wii U...\n", "processing");
+		SlushiUtils.printMsg("Compiling to Wii U...\n", PROCESSING);
 
 		var startTime:Float = Sys.time(); 
-
 		var compileProcess = Sys.command("make");
 
 		var endTime:Float = Sys.time(); 
@@ -76,7 +76,7 @@ class CafeCompiler {
 		var formattedTime:String = StringTools.trim(Math.fround(elapsedTime * 10) / 10 + "s");
 
 		if (compileProcess != 0) {
-			SlushiUtils.printMsg("Compilation failed", "error", "\n");
+			SlushiUtils.printMsg("Compilation failed", ERROR, "\n");
 			exitCodeNum = 2;
 		}
 
@@ -88,7 +88,7 @@ class CafeCompiler {
 		}
 
 		if (exitCodeNum == 0) {
-			SlushiUtils.printMsg('Compilation successful. Check [${jsonFile.haxeConfig.outDir}/wiiuFiles], compilation time: ${formattedTime}\n', "success", "\n");
+			SlushiUtils.printMsg('Compilation successful. Check [${jsonFile.haxeConfig.outDir}/wiiuFiles], compilation time: ${formattedTime}\n', SUCCESS, "\n");
 		}
 	}
 
@@ -104,5 +104,15 @@ class CafeCompiler {
 		}
 
 		return libs;
+	}
+
+	static function parseMakeDefines():String {
+		var defines = "";
+
+		for (define in Defines.parseCDefines()) {
+			defines += define + " ";
+		}
+
+		return defines;
 	}
 }

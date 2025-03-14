@@ -6,8 +6,18 @@ class Defines {
 	public static function parseHXDefines():Array<String> {
 		var defines:Array<String> = [];
 
-		for (define in jsonFile.haxeConfig.hxDefines) {
+		for (define in jsonFile.projectDefines) {
 			defines.push("-D " + define);
+		}
+
+		return defines;
+	}
+
+	public static function parseCDefines():Array<String> {
+		var defines:Array<String> = [];
+
+		for (define in jsonFile.projectDefines) {
+			defines.push("-D" + define);
 		}
 
 		return defines;

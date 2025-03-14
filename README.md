@@ -1,7 +1,7 @@
 # HxCompileU
 ![mainImage](https://github.com/Slushi-Github/hxCompileU/blob/main/docs/readme/MainImage.png)
 
-Using this small utility you can compile code from Haxe to PowerPC and finally the Nintendo Wii U using DevKitPro and [reflaxe.CPP](https://github.com/SomeRanDev/reflaxe.CPP).
+Using this small utility you can compile code from Haxe to PowerPC and finally the Nintendo Wii U using [DevKitPro](https://devkitpro.org/) and [reflaxe.CPP](https://github.com/SomeRanDev/reflaxe.CPP).
 
 Currently supported libraries to be used in conjunction with HxCompileU:
 
@@ -9,7 +9,7 @@ Currently supported libraries to be used in conjunction with HxCompileU:
 - [hxLibNotifications](https://github.com/Slushi-Github/hxLibNotifications): a library to create notifications on the Wii U (Useful for mostly plugins).
 - [hxLibMappedMemory](https://github.com/Slushi-Github/hxLibMappedMemory): a library to create mapped memory on the Wii U.
 - [SlushiUtilsU](https://github.com/Slushi-Github/slushiUtilsU): a library to facilitate the use of certain Wii U libraries.
-- [hxSDL2](https://github.com/Slushi-Github/hxSDL2): Haxe @:native bindings for SDL2 to do homebrew on Wii U.
+- [hxSDL2](https://github.com/Slushi-Github/hxSDL2): SDL2 (SDL2,SDL2_Image, SDL2_mixer...) @:native bindings for Haxe to do homebrew on Wii U.
 
 ## How?
 The magic really comes from [reflaxe.CPP](https://github.com/SomeRanDev/reflaxe.CPP), being an alternative to [HXCPP](https://github.com/HaxeFoundation/hxcpp) when you want to compile Haxe to C++.
@@ -17,8 +17,7 @@ By default, if you would try to make Haxe with HXCPP compile to PPC... the resul
 
 This project is simple, **yet incomplete**. 
 
-Using it creates a JSON file that contains all the basics for a Haxe compilation and a few other things that would go in the MakeFile.
-When compiling, first you compile the Haxe side, then you use a MakeFile to finish the compilation and bring it to the Wii U.
+This program what it does, is that by means of some data stored in a JSON file (``hxCompileUConfig.json``), it generates a MakeFile and a [HXML](https://haxe.org/manual/compiler-usage-hxml.html) file with those data of the JSON, of normal first it will try to execute the [HXML](https://haxe.org/manual/compiler-usage-hxml.html) with Haxe, [reflaxe.CPP](https://github.com/SomeRanDev/reflaxe.CPP) is in charge of generating the C++ code, if the compilation with Haxe is successful, it executes the MakeFile with Make and starts the normal compilation of a C++ code, if this is also successful, that's it, you have your homebrew for the Nintendo Wii U made with Haxe!
 
 ## Why?
 Well, since I got a Nintendo Wii U a while ago I've been interested in bringing Haxe to this console. 
@@ -28,7 +27,16 @@ So... why not experiment to do it taking advantage of the homebrew that exists f
 
 ## Usage
 
-You need [DevKitPro](https://devkitpro.org/wiki/Getting_Started), in addition to DevKitPPC and [WUT](https://github.com/devkitPro/wut).
+You need:
+- [DevKitPro](https://devkitpro.org/wiki/Getting_Started)
+
+- [WUT](https://github.com/devkitPro/wut?tab=readme-ov-file#install)
+
+- [reflaxe](https://github.com/SomeRanDev/reflaxe)
+
+- [reflaxe.CPP (Fork)](https://github.com/Slushi-Github/reflaxe.CPP)
+
+- [hxWUT](https://github.com/Slushi-Github/hxWUT)
 
 First, you need compilate this project, or you can use the precompiled version that is in the [releases](https://github.com/Slushi-Github/hxCompileU/releases), or you can download it from the [GitHub Actions](https://github.com/Slushi-Github/hxCompileU/actions).
 
@@ -50,6 +58,18 @@ After that, you will get your executable “haxeCompileU” in the ``export`` fo
 ``{haxeCompileUProgram} --compile``
 
 If you want to compile only Haxe but not to Wii U, you can use the following command:
-``{haxeCompileUProgram} --compile --haxeOnly``
+
+``{haxeCompileUProgram} --compile --onlyHaxe``
+
+
+You can also use the following command to compile only Wii U but not Haxe:
+
+``{haxeCompileUProgram} --compile --onlyCafe``
+
+
+You can also use the following command search a line of code in the [.elf] file from a line address of some log using DevKitPro's ``powerpc-eabi-addr2line`` program:
+
+``{haxeCompileUProgram} --searchProblem [lineAddress]``
+
 
 and that's it! if your compilation was successful on both Haxe and Wii U side, your ``.rpx`` and ``.elf`` will be in ``yourOuputFolder/wiiuFiles``.

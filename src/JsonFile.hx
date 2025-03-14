@@ -12,20 +12,11 @@ typedef HaxeConfig = {
 	outDir:String,
 	reportErrorStyle:String,
 	debugMode:Bool,
-	hxDefines:Array<String>,
 	othersOptions:Array<String>,
 }
 
-typedef CMakeConfing = {
-	appImage:String,
-	tvImage:String,
-	gamepadImage:String,
-}
-
-typedef WiiUonfing = {
+typedef WiiUConfig = {
 	projectName:String,
-	// useCMake:Bool,
-	// cmakeConfig:CMakeConfing,
 }
 
 typedef ConsoleSettings = {
@@ -36,13 +27,24 @@ typedef ConsoleSettings = {
 typedef JsonStruct = {
 	programVersion:String,
 	haxeConfig:HaxeConfig,
-	wiiuConfig:WiiUonfing,
+	wiiuConfig:WiiUConfig,
 	deleteTempFiles:Bool,
 	extraLibs:Array<String>,
-	// consoleSettings:ConsoleSettings,
+	projectDefines:Array<String>,
 }
 
 class JsonFile {
+	public static function checkJson():Bool {
+		if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/hxCompileUConfig.json")) {
+			var jsonFile:JsonStruct = JsonFile.getJson();
+			if (jsonFile == null) {
+				SlushiUtils.printMsg("JSON file is invalid, please check it", ERROR);
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static function getJson():JsonStruct {
 		try {
 			if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/hxCompileUConfig.json")) {
@@ -56,40 +58,30 @@ class JsonFile {
 						outDir: jsonContent.haxeConfig.outDir,
 						reportErrorStyle: jsonContent.haxeConfig.reportErrorStyle,
 						debugMode: jsonContent.haxeConfig.debugMode,
-						hxDefines: jsonContent.haxeConfig.hxDefines,
 						othersOptions: jsonContent.haxeConfig.othersOptions,
 					},
 					wiiuConfig: {
 						projectName: jsonContent.wiiuConfig.projectName,
-						// useCMake: jsonContent.wiiuConfig.useCMake,
-						// cmakeConfig: {
-						// 	appImage: jsonContent.wiiuConfig.cmakeConfig.appImage,
-						// 	tvImage: jsonContent.wiiuConfig.cmakeConfig.tvImage,
-						// 	gamepadImage: jsonContent.wiiuConfig.cmakeConfig.gamepadImage,
-						// },
 					},
 					deleteTempFiles: jsonContent.deleteTempFiles,
 					extraLibs: jsonContent.extraLibs,
-					// consoleSettings: {
-					// 	sendProgramToConsole: jsonContent.consoleSettings.sendProgramToConsole,
-					// 	consoleIP: jsonContent.consoleSettings.consoleIP,
-					// },
+					projectDefines: jsonContent.projectDefines,
 				};
 				return jsonStructure;
 			}
 		} catch (e) {
-			SlushiUtils.printMsg("Error loading [hxCompileUConfig.json]: " + e, "error");
+			SlushiUtils.printMsg("Error loading [hxCompileUConfig.json]: " + e, ERROR);
 		}
 		return null;
 	}
 
 	public static function createJson():Void {
 		if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/hxCompileUConfig.json")) {
-			SlushiUtils.printMsg("[hxCompileUConfig.json] already exists", "warning");
+			SlushiUtils.printMsg("[hxCompileUConfig.json] already exists", WARN);
 			return;
 		}
 
-		SlushiUtils.printMsg("Creating [hxCompileUConfig.json]", "processing");
+		SlushiUtils.printMsg("Creating [hxCompileUConfig.json]", PROCESSING);
 
 		var jsonStructure:JsonStruct = {
 			programVersion: Main.version,
@@ -99,31 +91,21 @@ class JsonFile {
 				outDir: "output",
 				reportErrorStyle: "pretty",
 				debugMode: false,
-				hxDefines: [],
 				othersOptions: [],
 			},
 			wiiuConfig: {
 				projectName: "project",
-				// useCMake: false,
-				// cmakeConfig: {
-				// 	appImage: "",
-				// 	tvImage: "",
-				// 	gamepadImage: "",
-				// },
 			},
 			deleteTempFiles: true,
 			extraLibs: [],
-			// consoleSettings: {
-			// 	sendProgramToConsole: false,
-			// 	consoleIP: "",
-			// },
+			projectDefines: [],
 		};
 
 		try {
 			File.saveContent(SlushiUtils.getPathFromCurrentTerminal() + "/hxCompileUConfig.json", Json.stringify(jsonStructure, "\t"));
-			SlushiUtils.printMsg("Created [hxCompileUConfig.json]", "success");
+			SlushiUtils.printMsg("Created [hxCompileUConfig.json]", SUCCESS);
 		} catch (e) {
-			SlushiUtils.printMsg("Error creating [hxCompileUConfig.json]: " + e, "error");
+			SlushiUtils.printMsg("Error creating [hxCompileUConfig.json]: " + e, ERROR);
 		}
 	}
 }

@@ -14,32 +14,32 @@ class HaxeCompiler {
 
 	public static function init() {
 		if (jsonFile == null) {
-			SlushiUtils.printMsg("Error loading [hxCompileUConfig.json]", "error");
+			SlushiUtils.printMsg("Error loading [hxCompileUConfig.json]", ERROR);
 			return;
 		}
 
 		// Check if all required fields are set
 		if (jsonFile.haxeConfig.sourceDir == "") {
-			SlushiUtils.printMsg("sourceDir in [hxCompileUConfig.json -> haxeConfig.sourceDir] is empty", "error");
+			SlushiUtils.printMsg("sourceDir in [hxCompileUConfig.json -> haxeConfig.sourceDir] is empty", ERROR);
 			exitCodeNum = 3;
 			return;
 		} else if (jsonFile.haxeConfig.hxMain == "") {
-			SlushiUtils.printMsg("hxMain in [hxCompileUConfig.json -> haxeConfig.hxMain] is empty", "error");
+			SlushiUtils.printMsg("hxMain in [hxCompileUConfig.json -> haxeConfig.hxMain] is empty", ERROR);
 			exitCodeNum = 3;
 			return;
 		} else if (jsonFile.haxeConfig.outDir == "") {
-			SlushiUtils.printMsg("outDir in [hxCompileUConfig.json -> haxeConfig.outDir] is empty", "error");
+			SlushiUtils.printMsg("outDir in [hxCompileUConfig.json -> haxeConfig.outDir] is empty", ERROR);
 			exitCodeNum = 3;
 			return;
 		} else if (jsonFile.haxeConfig.reportErrorStyle == "") {
-			SlushiUtils.printMsg("reportErrorStyle in [hxCompileUConfig.json -> haxeConfig.reportErrorStyle] is empty", "error");
+			SlushiUtils.printMsg("reportErrorStyle in [hxCompileUConfig.json -> haxeConfig.reportErrorStyle] is empty", ERROR);
 			exitCodeNum = 3;
 			return;
 		}
 
-		SlushiUtils.printMsg("Trying to compile Haxe project...", "processing");
+		SlushiUtils.printMsg("Trying to compile Haxe project...", PROCESSING);
 
-		SlushiUtils.printMsg('Creating [${hxmlFileName}.hxml]', "processing");
+		SlushiUtils.printMsg('Creating [${hxmlFileName}.hxml]', PROCESSING);
 		// make a temporal HXML
 		try {
 			var hxml:String = '
@@ -62,17 +62,17 @@ class HaxeCompiler {
 			// delete temporal hxml if already exists
 			if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml')) {
 				FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml');
-				SlushiUtils.printMsg('Deleted existing [${hxmlFileName}.hxml]', "info");
+				SlushiUtils.printMsg('Deleted existing [${hxmlFileName}.hxml]', INFO);
 			}
 			File.saveContent(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml', hxml);
 		} catch (e) {
-			SlushiUtils.printMsg('Error creating [${hxmlFileName}.hxml]: ${e}', "error");
+			SlushiUtils.printMsg('Error creating [${hxmlFileName}.hxml]: ${e}', ERROR);
 			exitCodeNum = 4;
 			return;
 		}
 
-		SlushiUtils.printMsg('Created [${hxmlFileName}.hxml]', "success");
-		SlushiUtils.printMsg("Compiling Haxe project...", "info");
+		SlushiUtils.printMsg('Created [${hxmlFileName}.hxml]', SUCCESS);
+		SlushiUtils.printMsg("Compiling Haxe project...", INFO);
 
 		var startTime:Float = Sys.time();
 
@@ -88,7 +88,7 @@ class HaxeCompiler {
 		var formattedTime:String = StringTools.trim(Math.fround(elapsedTime * 10) / 10 + "s");
 
 		if (compileProcess != 0) {
-			SlushiUtils.printMsg("Compilation failed", "error", "\n");
+			SlushiUtils.printMsg("Compilation failed", ERROR, "\n");
 			exitCodeNum = 2;
 		}
 
@@ -100,7 +100,7 @@ class HaxeCompiler {
 		}
 
 		if (exitCodeNum == 0) {
-			SlushiUtils.printMsg('Compilation successful, compilation time: ${formattedTime}\n', "success");
+			SlushiUtils.printMsg('Compilation successful, compilation time: ${formattedTime}\n', SUCCESS);
 		}
 	}
 

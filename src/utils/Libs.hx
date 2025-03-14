@@ -28,7 +28,7 @@ class Libs {
 			if (validLibs.exists(lib)) {
 				return OK;
 			} else {
-				SlushiUtils.printMsg("Invalid lib: " + lib, "error");
+				SlushiUtils.printMsg("Invalid lib: " + lib, ERROR);
 				return ERROR;
 			}
 		}
