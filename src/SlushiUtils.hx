@@ -61,7 +61,7 @@ class SlushiUtils {
 	public static function cleanBuild():Void {
 		if (FileSystem.exists(getPathFromCurrentTerminal() + "/" + JsonFile.getJson().haxeConfig.outDir)) {
 			try {
-				FileSystem.deleteDirectory(getPathFromCurrentTerminal() + "/output");
+				FileSystem.deleteDirectory(getPathFromCurrentTerminal() + "/" + JsonFile.getJson().haxeConfig.outDir);
 				SlushiUtils.printMsg("Deleted [" + JsonFile.getJson().haxeConfig.outDir + "] directory", SUCCESS);
 			}
 		}
