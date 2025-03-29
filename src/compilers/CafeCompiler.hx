@@ -1,7 +1,6 @@
 package src.compilers;
 
 import src.compilers.HaxeCompiler;
-import sys.io.Process;
 import sys.io.File;
 import sys.FileSystem;
 import src.JsonFile;
@@ -10,6 +9,13 @@ import haxe.Resource;
 import src.Main;
 
 using StringTools;
+
+/**
+ * The CafeCompiler class is used to compile the project to Wii U
+ * using [DevKitPro] (https://devkitpro.org) MakeFile.
+ * 
+ * Author: Slushi.
+ */
 
 class CafeCompiler {
 	static var jsonFile:JsonStruct = JsonFile.getJson();
@@ -66,10 +72,12 @@ class CafeCompiler {
 			return;
 		}
 
-		SlushiUtils.printMsg("Compiling to Wii U...\n", PROCESSING);
+		SlushiUtils.printMsg("Compiling to Wii U...\n------------------", PROCESSING);
 
 		var startTime:Float = Sys.time(); 
 		var compileProcess = Sys.command("make");
+
+		SlushiUtils.printMsg("------------------", NONE);
 
 		var endTime:Float = Sys.time(); 
 		var elapsedTime:Float = endTime - startTime; 

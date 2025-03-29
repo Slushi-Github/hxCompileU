@@ -1,5 +1,11 @@
 package src.utils;
 
+/**
+ * The Defines class is used to parse the defines that are required by the project.
+ * 
+ * Author: Slushi.
+ */
+
 class Defines {
 	static var jsonFile:JsonStruct = JsonFile.getJson();
 

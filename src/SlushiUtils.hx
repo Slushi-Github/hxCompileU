@@ -2,6 +2,13 @@ package src;
 
 using StringTools;
 
+/**
+ * Just a simple class to print messages and other stuff.
+ * The "SlushiUtils" class is common in projects created by me xd.
+ * 
+ * Author: Slushi.
+ */
+
 enum MsgType {
 	INFO;
 	SUCCESS;
@@ -58,18 +65,38 @@ class SlushiUtils {
 		}
 	}
 
+	public static function deleteRecursively(path:String):Void {
+		if (FileSystem.exists(path)) {
+			if (FileSystem.isDirectory(path)) {
+				for (file in FileSystem.readDirectory(path)) {
+					deleteRecursively(path + "/" + file);
+				}
+				FileSystem.deleteDirectory(path);
+			} else {
+				FileSystem.deleteFile(path);
+			}
+		}
+	}
+
 	public static function cleanBuild():Void {
-		if (FileSystem.exists(getPathFromCurrentTerminal() + "/" + JsonFile.getJson().haxeConfig.outDir)) {
+		var outDir = getPathFromCurrentTerminal() + "/" + JsonFile.getJson().haxeConfig.outDir;
+		var buildDir = getPathFromCurrentTerminal() + "/build";
+
+		if (FileSystem.exists(outDir)) {
 			try {
-				FileSystem.deleteDirectory(getPathFromCurrentTerminal() + "/" + JsonFile.getJson().haxeConfig.outDir);
-				SlushiUtils.printMsg("Deleted [" + JsonFile.getJson().haxeConfig.outDir + "] directory", SUCCESS);
+				deleteRecursively(outDir);
+				SlushiUtils.printMsg("Deleted [" + outDir + "]", SUCCESS);
+			} catch (e:Dynamic) {
+				SlushiUtils.printMsg("Failed to delete [" + outDir + "]: " + e, ERROR);
 			}
 		}
 
-		if (FileSystem.exists(getPathFromCurrentTerminal() + "/build")) {
+		if (FileSystem.exists(buildDir)) {
 			try {
-				FileSystem.deleteDirectory(getPathFromCurrentTerminal() + "/build");
-				SlushiUtils.printMsg("Deleted [build] directory", SUCCESS);
+				deleteRecursively(buildDir);
+				SlushiUtils.printMsg("Deleted [" + buildDir + "]", SUCCESS);
+			} catch (e:Dynamic) {
+				SlushiUtils.printMsg("Failed to delete [" + buildDir + "]: " + e, ERROR);
 			}
 		}
 	}

@@ -6,11 +6,17 @@ import sys.FileSystem;
 import src.SlushiUtils;
 import src.Main;
 
+/**
+ * The main JSON file for HxCompileU, contains the configuration of the project
+ * like the libs, source directory, the output directory, the main class, etc.
+ * 
+ * Author: Slushi
+ */
+
 typedef HaxeConfig = {
 	sourceDir:String,
 	hxMain:String,
 	outDir:String,
-	reportErrorStyle:String,
 	debugMode:Bool,
 	othersOptions:Array<String>,
 }
@@ -56,7 +62,6 @@ class JsonFile {
 						sourceDir: jsonContent.haxeConfig.sourceDir,
 						hxMain: jsonContent.haxeConfig.hxMain,
 						outDir: jsonContent.haxeConfig.outDir,
-						reportErrorStyle: jsonContent.haxeConfig.reportErrorStyle,
 						debugMode: jsonContent.haxeConfig.debugMode,
 						othersOptions: jsonContent.haxeConfig.othersOptions,
 					},
@@ -89,7 +94,6 @@ class JsonFile {
 				sourceDir: "source",
 				hxMain: "Main",
 				outDir: "output",
-				reportErrorStyle: "pretty",
 				debugMode: false,
 				othersOptions: [],
 			},

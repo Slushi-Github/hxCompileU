@@ -6,7 +6,7 @@ import src.utils.DevKitProUtils;
 
 class Main {
 	public static var hxcompileuString = "\x1b[38;5;214mHx\033[0mCompile\x1b[38;5;74mU\033[0m";
-	public static var version:String = "1.3.0";
+	public static var version:String = "1.3.2";
 	static var stdin = Sys.stdin();
 	static var stdout = Sys.stdout();
 	static var args = Sys.args();

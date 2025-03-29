@@ -1,11 +1,18 @@
 package src.compilers;
 
-import sys.io.Process;
+import utils.PrepareMacro;
 import sys.io.File;
 import sys.FileSystem;
 import src.JsonFile;
 import src.SlushiUtils;
 import src.Main;
+
+/**
+ * The Haxe compiler, a class that handles the compilation of Haxe projects using
+ * the Haxe compiler iself and a HXML file (https://haxe.org/manual/compiler-usage-hxml.html).
+ * 
+ * Author: Slushi.
+ */
 
 class HaxeCompiler {
 	static var jsonFile:JsonStruct = JsonFile.getJson();
@@ -31,15 +38,11 @@ class HaxeCompiler {
 			SlushiUtils.printMsg("outDir in [hxCompileUConfig.json -> haxeConfig.outDir] is empty", ERROR);
 			exitCodeNum = 3;
 			return;
-		} else if (jsonFile.haxeConfig.reportErrorStyle == "") {
-			SlushiUtils.printMsg("reportErrorStyle in [hxCompileUConfig.json -> haxeConfig.reportErrorStyle] is empty", ERROR);
-			exitCodeNum = 3;
-			return;
 		}
 
 		SlushiUtils.printMsg("Trying to compile Haxe project...", PROCESSING);
-
 		SlushiUtils.printMsg('Creating [${hxmlFileName}.hxml]', PROCESSING);
+
 		// make a temporal HXML
 		try {
 			var hxml:String = '
@@ -50,14 +53,16 @@ class HaxeCompiler {
 	-lib reflaxe.cpp
 	-lib hxwut
 	-D cpp-output=${jsonFile.haxeConfig.outDir}
-	-D report-error-style=${jsonFile.haxeConfig.reportErrorStyle}
 	-D mainClass=${jsonFile.haxeConfig.hxMain}
+	-D cxx-no-null-warnings
 	# Extra Libs
 	${finalHxLibs()}
 	# Extra defines
 	${finalHxDefines()}
 	# Extra options
 	${finalOtherOptions()}
+	# Macros
+	${generateMacro()}
 ';
 			// delete temporal hxml if already exists
 			if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml')) {
@@ -72,7 +77,7 @@ class HaxeCompiler {
 		}
 
 		SlushiUtils.printMsg('Created [${hxmlFileName}.hxml]', SUCCESS);
-		SlushiUtils.printMsg("Compiling Haxe project...", INFO);
+		SlushiUtils.printMsg("Compiling Haxe project...\n------------------", PROCESSING);
 
 		var startTime:Float = Sys.time();
 
@@ -82,6 +87,8 @@ class HaxeCompiler {
 		} else {
 			compileProcess = Sys.command("haxe", ['${hxmlFileName}.hxml']);
 		}
+
+		SlushiUtils.printMsg("------------------\n", NONE);
 
 		var endTime:Float = Sys.time();
 		var elapsedTime:Float = endTime - startTime;
@@ -96,6 +103,12 @@ class HaxeCompiler {
 		if (jsonFile.deleteTempFiles == true) {
 			if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml')) {
 				FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml');
+			}
+			if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + jsonFile.haxeConfig.sourceDir + "/hxCompileUMacros/HXCU_MACRO.hx")) {
+				FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + jsonFile.haxeConfig.sourceDir + "/hxCompileUMacros/HXCU_MACRO.hx");
+			}
+			if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + jsonFile.haxeConfig.sourceDir + "/hxCompileUMacros")) {
+				FileSystem.deleteDirectory(SlushiUtils.getPathFromCurrentTerminal() + jsonFile.haxeConfig.sourceDir + "/hxCompileUMacros");
 			}
 		}
 
@@ -112,7 +125,7 @@ class HaxeCompiler {
 		var libs = "";
 
 		for (lib in Libs.parseHXLibs()) {
-			libs += lib + "\n";
+			libs += lib + "\n\t";
 		}
 
 		return libs;
@@ -136,5 +149,28 @@ class HaxeCompiler {
 		}
 
 		return options;
+	}
+
+	static function generateMacro():String {
+		var macroStr:String = "";
+		var checkResult:MacroFinalCheck = PrepareMacro.check();
+
+		switch (checkResult) {
+			case MACRO_ERROR:
+				SlushiUtils.printMsg("Error checking macros", ERROR);
+				return "";
+			case MACRO_SKIP:
+				return "";
+			case MACRO_OK:
+			default:
+				return "";
+		}
+		
+		for (lib in 0...PrepareMacro.libsRequiringMacrosArray.length) {
+			macroStr += "--macro " + jsonFile.haxeConfig.sourceDir + ".hxCompileUMacros.HXCU_MACRO.InitMacroFunction()\n";
+			PrepareMacro.searchLibInHaxeLibsAndSetHxFile(PrepareMacro.libsRequiringMacrosArray[lib]);
+		}
+
+		return macroStr;
 	}
 }

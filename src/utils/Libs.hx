@@ -1,21 +1,85 @@
 package src.utils;
 
+using StringTools;
+
+/**
+ * The library "manager" of HxCompileU, it contains all the libs that are supported and their configurations
+ * I should make a better support that does not require modifying the program itself but, I don't know how 
+ * and... there are very few and specific libraries that should work with the project, for the same reason
+ * of how specific is the project itself hehe.
+ * 
+ * Author: Slushi.
+ */
+
 enum FinalCheck {
 	OK;
 	ERROR;
 	SKIP;
 }
 
-class Libs {
-	public static var validLibs:Map<String, Array<Array<String>>> = [
-		"libnotifications" => [["hxlibnotifications"], ["notifications"]],
-		"slushiUtilsU" => [["slushiUtilsU"], ["None"]],
-		"SDL2" => [["hxsdl2"], ["SDL2_mixer", "SDL2_image", "SDL2_ttf", "SDL2_gfx", "SDL2", "vorbisfile", "vorbis", "ogg", "ogg", "mpg123", "modplug", "png", "jpeg", "z"]],
-		// EXPERIMENTAL:
-		"leafyEngine" => [["leafyengine"], ["None"]],
-	];
+typedef HaxeLib = {
+	libName:String,
+	requirePreparation:Bool,
+	skip:Bool
+}
 
-	// HxSDLU
+typedef CafeLib = {
+	libsArray:Array<String>,
+	skip:Bool
+}
+
+typedef HxCULibsConfig = {
+	haxeLibraries:HaxeLib,
+	cafeLibraries:CafeLib
+}
+
+class Libs {
+	public static var validLibs:Map<String, HxCULibsConfig> = [
+		"libnotifications" => {
+			haxeLibraries: {libName: "hxlibnotifications", requirePreparation: false, skip: false},
+			cafeLibraries: {libsArray: ["notifications"], skip: false}
+		},
+		"slushiUtilsU" => {
+			haxeLibraries: {libName: "slushiUtilsU", requirePreparation: false, skip: false},
+			cafeLibraries: {libsArray: [], skip: true}
+		},
+		"SDL2" => {
+			haxeLibraries: {libName: "hxsdl2", requirePreparation: false, skip: false},
+			cafeLibraries: {
+				libsArray: [
+					"SDL2_mixer",
+					"SDL2_image",
+					"SDL2_ttf",
+					"SDL2_gfx",
+					"SDL2",
+					"vorbisfile",
+					"vorbis",
+					"ogg",
+					"mpg123",
+					"modplug",
+					"png",
+					"jpeg",
+					"z",
+					"freetype",
+					"bz2",
+				],
+				skip: false
+			}
+		},
+		"SDL_FontCache" => {
+			haxeLibraries: {libName: "hxsdl_fontcache", requirePreparation: true, skip: false},
+			cafeLibraries: {libsArray: [], skip: true}
+		},
+		// EXPERIMENTAL:
+		"leafyEngine" => {
+			haxeLibraries: {libName: "leafyengine", requirePreparation: false, skip: false},
+			cafeLibraries: {libsArray: [], skip: true}
+		},
+		"curl" => {
+			haxeLibraries: {libName: "", requirePreparation: false, skip: true},
+			cafeLibraries: {libsArray: ["curl", "mbedtls", "mbedx509", "mbedcrypto"], skip: false}
+		},
+	];
 
 	static var jsonFile:JsonStruct = JsonFile.getJson();
 
@@ -33,19 +97,18 @@ class Libs {
 			}
 		}
 
-		return ERROR;
+		return OK;
 	}
 
 	public static function parseHXLibs():Array<String> {
 		var libs:Array<String> = [];
 
 		for (hxLib in jsonFile.extraLibs) {
-
-			if (validLibs.get(hxLib)[0][0] == "None") {
+			if (validLibs.get(hxLib).haxeLibraries.skip) {
 				continue;
 			}
 
-			var finalHxLib:String = validLibs.get(hxLib)[0][0];
+			var finalHxLib:String = validLibs.get(hxLib).haxeLibraries.libName;
 			libs.push("-lib " + finalHxLib);
 		}
 
@@ -56,12 +119,17 @@ class Libs {
 		var libs:Array<String> = [];
 
 		for (makeLib in jsonFile.extraLibs) {
-			if (validLibs.get(makeLib)[1][0] == "None") {
+			if (validLibs.get(makeLib).cafeLibraries.skip) {
 				continue;
 			}
 
-			for (lib in validLibs.get(makeLib)[1]) {
-				libs.push("-l" + lib);
+			for (lib in validLibs.get(makeLib).cafeLibraries.libsArray) {
+				// If lib contains "[N]" it means it's a lib like: `curl-config --libs`
+				if (lib.contains("[N]")) {
+					libs.push(lib.replace("[N]", ""));
+				} else {
+					libs.push("-l" + lib);
+				}
 			}
 		}
 

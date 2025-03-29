@@ -1,6 +1,11 @@
 package src.utils;
 
-import sys.io.Process;
+/**
+ * The DevKitProUtils class is used to use the DevKitPro tools
+ * For now, only the powerpc-eabi-addr2line tool is used.
+ * 
+ * Author: Slushi.
+ */
 
 class DevKitProUtils {
 	public static var jsonFile:JsonStruct = JsonFile.getJson();

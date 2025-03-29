@@ -4,6 +4,13 @@ import src.SlushiUtils;
 import src.compilers.CafeCompiler;
 import src.compilers.HaxeCompiler;
 
+/**
+ * The main compiler, it will start the compilation of the project
+ * in Haxe and Wii U.
+ * 
+ * Author: Slushi.
+ */
+
 class MainCompiler {
 	public static function start(arg2:String):Void {
 		if (SlushiUtils.parseVersion(Main.version) < SlushiUtils.parseVersion(JsonFile.getJson().programVersion)
@@ -34,7 +41,7 @@ class MainCompiler {
 			SlushiUtils.cleanBuild();
 		}
 
-		// First compile Haxe part, then Wii U part
+		// First compile Haxe part, wait and then compile Wii U part
 		HaxeCompiler.init();
 		Sys.sleep(2);
 		CafeCompiler.init();
