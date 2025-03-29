@@ -68,7 +68,7 @@ You can also use the following command to compile only Wii U but not Haxe:
 ``{haxeCompileUProgram} --compile --onlyCafe``
 
 
-You can also use the following command search a line of code in the [.elf] file from a line address of some log using DevKitPro's ``powerpc-eabi-addr2line`` program:
+You can also use the following command search a line of code in the ``.elf`` file from a line address of some log using DevKitPro's ``powerpc-eabi-addr2line`` program:
 
 ``{haxeCompileUProgram} --searchProblem [lineAddress]``
 
