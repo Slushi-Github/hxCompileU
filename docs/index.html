@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: white;
+            /* Ensure the iframe has a white background */
+        }
+    </style>
+</head>
+
+<body>
+    <!DOCTYPE html>
+    <html lang="es">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HxCompileU</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100vh;
+                background: linear-gradient(135deg, #009ac7, #f68712);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                color: white;
+                font-family: Arial, sans-serif;
+                position: relative;
+            }
+
+            .container {
+                text-align: center;
+            }
+
+            img {
+                max-width: 400px;
+                width: 100%;
+                height: auto;
+                margin-bottom: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+                margin: 0;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            }
+
+            p {
+                font-size: 1.2em;
+                margin-top: 10px;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            }
+
+            .buttons {
+                margin-top: 30px;
+            }
+
+            .btn {
+                display: inline-block;
+                padding: 10px 20px;
+                margin: 0 10px;
+                font-size: 1em;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .btn-github {
+                background-color: #333;
+                border: 2px solid #333;
+            }
+
+            .btn-github:hover {
+                background-color: #555;
+                transform: scale(1.1);
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            }
+
+            .btn-download {
+                background-color: #007bff;
+                border: 2px solid #007bff;
+            }
+
+            .btn-download:hover {
+                background-color: #0056b3;
+                transform: scale(1.1);
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            }
+
+            .btn::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(255, 255, 255, 0.1);
+                opacity: 0;
+                transition: opacity 0.2s ease;
+                z-index: -1;
+            }
+
+            .btn:hover::before {
+                opacity: 1;
+            }
+
+            .btn i {
+                margin-right: 5px;
+            }
+
+            .footer {
+                position: absolute;
+                bottom: 10px;
+                font-size: 0.9em;
+                opacity: 0.7;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <img src="./webImages/mainImage.webp" alt="HxCompileU Logo">
+            <h1>HxCompileU</h1>
+            <p>Use Haxe to create homebrew on the Nintendo Wii U!</p>
+            <p>Let's use a powerful and beautiful programming language to create wonderful things for this initially misunderstood
+            console!</p>
+            <div class="buttons">
+                <a href="https://github.com/Slushi-Github/hxCompileU" target="_blank" class="btn btn-github">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="https://github.com/Slushi-Github/hxCompileU/releases" class="btn btn-download">
+                    <i class="fas fa-download"></i> Download latest release
+                </a>
+            </div>
+        </div>
+        <div class="footer">
+            Website created using QwenAI. Logo by <a href="https://github.com/Slushi-Github">Slushi</a>.
+        </div>
+        <!-- Font Awesome Icons -->
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    </body>
+
+    </html>
+
+
+
+    <script>
+
+    </script>
+</body>
+
+</html>
