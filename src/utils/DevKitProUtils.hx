@@ -1,5 +1,7 @@
 package src.utils;
 
+import haxe.io.Path;
+
 /**
  * The DevKitProUtils class is used to use the DevKitPro tools
  * For now, only the powerpc-eabi-addr2line tool is used.
@@ -34,5 +36,36 @@ class DevKitProUtils {
 		SlushiUtils.printMsg("----------------------", NONE);
 		Sys.command(addr2lineProgram, ["-e", elfPath, address]);
 		SlushiUtils.printMsg("----------------------", NONE);
+	}
+
+	public static function sendRPX():Void {
+		var rpxPath:String = SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles/" + jsonFile.wiiuConfig.projectName
+			+ ".rpx";
+		if (!FileSystem.exists(rpxPath)) {
+			SlushiUtils.printMsg("[.rpx] file not found", ERROR);
+			return;
+		}
+
+		// remove path from the file name
+		var rpxFileName:String = Path.withoutDirectory(rpxPath);
+
+		SlushiUtils.printMsg("Sending RPX file: [" + rpxFileName + "]", PROCESSING);
+
+		var devKitProToolsEnv = Sys.getEnv("DEVKITPRO");
+
+		var wiiloadProgram = devKitProToolsEnv + "/tools/bin/wiiload";
+
+		if (Sys.getEnv("WIILOAD") == null) {
+			Sys.putEnv("WIILOAD", jsonFile.wiiuConfig.consoleIP);
+		} else {
+			SlushiUtils.printMsg("WIILOAD environment variable already set, using that...", WARN);
+		}
+
+		if (devKitProToolsEnv == null) {
+			SlushiUtils.printMsg("DEVKITPRO environment variable not found", ERROR);
+			return;
+		}
+
+		Sys.command(wiiloadProgram, [rpxPath]);
 	}
 }

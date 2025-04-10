@@ -23,6 +23,7 @@ typedef HaxeConfig = {
 
 typedef WiiUConfig = {
 	projectName:String,
+	consoleIP:String,
 }
 
 typedef ConsoleSettings = {
@@ -67,6 +68,7 @@ class JsonFile {
 					},
 					wiiuConfig: {
 						projectName: jsonContent.wiiuConfig.projectName,
+						consoleIP: jsonContent.wiiuConfig.consoleIP,
 					},
 					deleteTempFiles: jsonContent.deleteTempFiles,
 					extraLibs: jsonContent.extraLibs,
@@ -99,6 +101,7 @@ class JsonFile {
 			},
 			wiiuConfig: {
 				projectName: "project",
+				consoleIP: "0.0.0.0",
 			},
 			deleteTempFiles: true,
 			extraLibs: [],

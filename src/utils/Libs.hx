@@ -70,6 +70,10 @@ class Libs {
 			haxeLibraries: {libName: "hxsdl_fontcache", requirePreparation: true, skip: false},
 			cafeLibraries: {libsArray: [], skip: true}
 		},
+		"jansson" => {
+			haxeLibraries: {libName: "hxjansson", requirePreparation: false, skip: false},
+			cafeLibraries: {libsArray: ["jansson"], skip: false}
+		},
 		// EXPERIMENTAL:
 		"leafyEngine" => {
 			haxeLibraries: {libName: "leafyengine", requirePreparation: false, skip: false},

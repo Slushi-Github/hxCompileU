@@ -11,6 +11,7 @@ Currently supported libraries to be used in conjunction with HxCompileU:
 - [SlushiUtilsU](https://github.com/Slushi-Github/slushiUtilsU): a library to facilitate the use of certain Wii U libraries.
 - [hxSDL2](https://github.com/Slushi-Github/hxSDL2): SDL2 (SDL2, SDL2_Image, SDL2_mixer...) @:native bindings for Haxe, for use SDL2 on the Wii U.
 - [hxSDL_FontCache](https://github.com/Slushi-Github/hxSDL_FontCache): SDL_FontCache @:native bindings for Haxe to do homebrew on Wii U.
+- [hxJansson](https://github.com/Slushi-Github/hxJansson): Jansson @:native bindings for Haxe to do homebrew on Wii U.
 
 ## How?
 The magic really comes from [reflaxe.CPP](https://github.com/SomeRanDev/reflaxe.CPP), being an alternative to [HXCPP](https://github.com/HaxeFoundation/hxcpp) when you want to compile Haxe to C++.
@@ -71,6 +72,11 @@ You can also use the following command to compile only Wii U but not Haxe:
 You can also use the following command search a line of code in the ``.elf`` file from a line address of some log using DevKitPro's ``powerpc-eabi-addr2line`` program:
 
 ``{haxeCompileUProgram} --searchProblem [lineAddress]``
+
+
+You can also use the following command send the ``.rpx`` file to the Wii U using DevKitPro's ``wiiload`` program:
+
+``{haxeCompileUProgram} --sendRPX``
 
 
 and that's it! if your compilation was successful on both Haxe and Wii U side, your ``.rpx`` and ``.elf`` will be in ``yourOuputFolder/wiiuFiles``.
