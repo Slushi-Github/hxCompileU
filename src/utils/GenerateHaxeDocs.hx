@@ -14,12 +14,12 @@ import src.Main;
  * Author: Slushi.
  */
 
-class HaxeCompiler {
+class GenerateHaxeDocs {
 	static var jsonFile:JsonStruct = JsonFile.getJson();
-	static final hxmlFileName:String = "temphxml";
+	static final hxmlFileName:String = "doxTemphxml";
 	static var exitCodeNum:Int = 0;
 
-	public static function init(generateDoxDocs:Bool = false) {
+	public static function init() {
 		if (jsonFile == null) {
 			SlushiUtils.printMsg("Error loading [hxCompileUConfig.json]", ERROR);
 			return;
@@ -40,19 +40,6 @@ class HaxeCompiler {
 			return;
 		}
 
-		var reportStyle:String = jsonFile.haxeConfig.errorReportingStyle;
-		var validStyles = ["classic", "indent", "pretty"];
-		var style = jsonFile.haxeConfig.errorReportingStyle;
-		if (style == "" || !Lambda.has(validStyles, style)) {
-			SlushiUtils.printMsg("errorReportingStyle in [hxCompileUConfig.json -> haxeConfig.errorReportingStyle] is invalid ("
-				+ style
-				+ "), using [classic]", WARN);
-			reportStyle = "classic";
-		} else {
-			reportStyle = style;
-		}
-
-
 		SlushiUtils.printMsg("Trying to compile Haxe project...", PROCESSING);
 		SlushiUtils.printMsg('Creating [${hxmlFileName}.hxml]', PROCESSING);
 
@@ -65,28 +52,17 @@ class HaxeCompiler {
 	-main ${jsonFile.haxeConfig.hxMain}
 	-lib reflaxe.cpp
 	-lib hxwut
-	-D cpp-output=${jsonFile.haxeConfig.outDir}
-	-D mainClass=${jsonFile.haxeConfig.hxMain}
 	-D cxx-no-null-warnings
-	-D message.reporting=${reportStyle}
-	# Extra Libs
+	${generateMacro()}
+	#####
 	${finalHxLibs()}
+	# Extra Libs
 	# Extra defines
 	${finalHxDefines()}
 	# Extra options
 	${finalOtherOptions()}
 	# Macros
-	${generateMacro()}
 ';
-
-			if (jsonFile.haxeConfig.generateDoxDocs && generateDoxDocs) {
-				hxml += '\n
-	# Generate Dox Docs
-	-xml ${jsonFile.haxeConfig.outDir}/${jsonFile.wiiuConfig.projectName}_docs.xml
-	-D doc-gen
-';
-			}
-
 			// delete temporal hxml if already exists
 			if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml')) {
 				FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml');
@@ -122,11 +98,7 @@ class HaxeCompiler {
 			exitCodeNum = 2;
 		}
 
-		if (exitCodeNum == 0 && jsonFile.haxeConfig.generateDoxDocs && generateDoxDocs) {
-			SlushiUtils.printMsg("Haxe documentation generated successfully, use [haxelib run dox ...] to terminate the process", SUCCESS);
-		}
-
-		// delete temporal hxml and macros
+		// delete temporal hxml
 		if (jsonFile.deleteTempFiles == true) {
 			if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml')) {
 				FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + '/${hxmlFileName}.hxml');

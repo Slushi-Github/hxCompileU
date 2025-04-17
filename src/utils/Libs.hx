@@ -74,7 +74,6 @@ class Libs {
 			haxeLibraries: {libName: "hxjansson", requirePreparation: false, skip: false},
 			cafeLibraries: {libsArray: ["jansson"], skip: false}
 		},
-		// EXPERIMENTAL:
 		"leafyEngine" => {
 			haxeLibraries: {libName: "leafyengine", requirePreparation: false, skip: false},
 			cafeLibraries: {libsArray: [], skip: true}
@@ -83,6 +82,11 @@ class Libs {
 			haxeLibraries: {libName: "", requirePreparation: false, skip: true},
 			cafeLibraries: {libsArray: ["curl", "mbedtls", "mbedx509", "mbedcrypto"], skip: false}
 		},
+		"vorbis" => {
+			haxeLibraries: {libName: "hxvorbis", requirePreparation: false, skip: false},
+			cafeLibraries: {libsArray: ["vorbis"], skip: false}
+		},
+		// EXPERIMENTAL:
 	];
 
 	static var jsonFile:JsonStruct = JsonFile.getJson();

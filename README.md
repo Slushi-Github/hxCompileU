@@ -12,6 +12,9 @@ Currently supported libraries to be used in conjunction with HxCompileU:
 - [hxSDL2](https://github.com/Slushi-Github/hxSDL2): SDL2 (SDL2, SDL2_Image, SDL2_mixer...) @:native bindings for Haxe, for use SDL2 on the Wii U.
 - [hxSDL_FontCache](https://github.com/Slushi-Github/hxSDL_FontCache): SDL_FontCache @:native bindings for Haxe to do homebrew on Wii U.
 - [hxJansson](https://github.com/Slushi-Github/hxJansson): Jansson @:native bindings for Haxe to do homebrew on Wii U.
+- [hxVorbis](https://github.com/Slushi-Github/hxVorbis): Vorbis @:native bindings for Haxe to do homebrew on Wii U.
+
+- [Leafy Engine](https://github.com/Slushi-Github/leafyEngine): A 2D engine for the Wii U made with Haxe.
 
 ## How?
 The magic really comes from [reflaxe.CPP](https://github.com/SomeRanDev/reflaxe.CPP), being an alternative to [HXCPP](https://github.com/HaxeFoundation/hxcpp) when you want to compile Haxe to C++.

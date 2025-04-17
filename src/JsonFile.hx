@@ -18,7 +18,9 @@ typedef HaxeConfig = {
 	hxMain:String,
 	outDir:String,
 	debugMode:Bool,
+	generateDoxDocs:Bool,
 	othersOptions:Array<String>,
+	errorReportingStyle:String,
 }
 
 typedef WiiUConfig = {
@@ -40,7 +42,14 @@ typedef JsonStruct = {
 	projectDefines:Array<String>,
 }
 
+/**
+ * The JsonFile class is used to parse the JSON file that contains the configuration of the project
+ */
 class JsonFile {
+	/**
+	 * Checks if the JSON file is valid
+	 * @return Bool
+	 */
 	public static function checkJson():Bool {
 		if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/hxCompileUConfig.json")) {
 			var jsonFile:JsonStruct = JsonFile.getJson();
@@ -52,6 +61,10 @@ class JsonFile {
 		return true;
 	}
 
+	/**
+	 * Returns the JSON file as a JsonStruct
+	 * @return JsonStruct
+	 */
 	public static function getJson():JsonStruct {
 		try {
 			if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/hxCompileUConfig.json")) {
@@ -64,7 +77,9 @@ class JsonFile {
 						hxMain: jsonContent.haxeConfig.hxMain,
 						outDir: jsonContent.haxeConfig.outDir,
 						debugMode: jsonContent.haxeConfig.debugMode,
+						generateDoxDocs: jsonContent.haxeConfig.generateDoxDocs,
 						othersOptions: jsonContent.haxeConfig.othersOptions,
+						errorReportingStyle: jsonContent.haxeConfig.errorReportingStyle,
 					},
 					wiiuConfig: {
 						projectName: jsonContent.wiiuConfig.projectName,
@@ -82,6 +97,9 @@ class JsonFile {
 		return null;
 	}
 
+	/**
+	 * Creates the JSON file if it doesn't exist
+	 */
 	public static function createJson():Void {
 		if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/hxCompileUConfig.json")) {
 			SlushiUtils.printMsg("[hxCompileUConfig.json] already exists", WARN);
@@ -97,7 +115,9 @@ class JsonFile {
 				hxMain: "Main",
 				outDir: "output",
 				debugMode: false,
+				generateDoxDocs: false,
 				othersOptions: [],
+				errorReportingStyle: "pretty",
 			},
 			wiiuConfig: {
 				projectName: "project",
