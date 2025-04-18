@@ -47,7 +47,7 @@ class CafeCompiler {
 			var makefileContent:String = Resource.getString("cafeMakefileWUT");
 			makefileContent = makefileContent.replace("[PROGRAM_VERSION]", Main.version);
 			makefileContent = makefileContent.replace("[PROJECT_NAME]", jsonFile.wiiuConfig.projectName);
-			makefileContent = makefileContent.replace("[SOURCE_DIR]", jsonFile.haxeConfig.outDir + "/" + jsonFile.haxeConfig.sourceDir);
+			makefileContent = makefileContent.replace("[SOURCE_DIR]", jsonFile.haxeConfig.outDir + "/src");
 			makefileContent = makefileContent.replace("[INCLUDE_DIR]", jsonFile.haxeConfig.outDir + "/include");
 			makefileContent = makefileContent.replace("[LIBS]", parseMakeLibs());
 			makefileContent = makefileContent.replace("[DEFINES]", parseMakeDefines());
