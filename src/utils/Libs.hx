@@ -36,7 +36,7 @@ typedef HxCULibsConfig = {
 class Libs {
 	public static var validLibs:Map<String, HxCULibsConfig> = [
 		"libnotifications" => {
-			haxeLibraries: {libName: "hxlibnotifications", requirePreparation: false, skip: false},
+			haxeLibraries: {libName: "hxu_libnotifications", requirePreparation: false, skip: false},
 			cafeLibraries: {libsArray: ["notifications"], skip: false}
 		},
 		"slushiUtilsU" => {
@@ -44,7 +44,7 @@ class Libs {
 			cafeLibraries: {libsArray: [], skip: true}
 		},
 		"SDL2" => {
-			haxeLibraries: {libName: "hxsdl2", requirePreparation: false, skip: false},
+			haxeLibraries: {libName: "hxu_sdl2", requirePreparation: false, skip: false},
 			cafeLibraries: {
 				libsArray: [
 					"SDL2_mixer",
@@ -67,11 +67,11 @@ class Libs {
 			}
 		},
 		"SDL_FontCache" => {
-			haxeLibraries: {libName: "hxsdl_fontcache", requirePreparation: true, skip: false},
+			haxeLibraries: {libName: "hxu_sdl_fontcache", requirePreparation: true, skip: false},
 			cafeLibraries: {libsArray: [], skip: true}
 		},
 		"jansson" => {
-			haxeLibraries: {libName: "hxjansson", requirePreparation: false, skip: false},
+			haxeLibraries: {libName: "hxu_jansson", requirePreparation: false, skip: false},
 			cafeLibraries: {libsArray: ["jansson"], skip: false}
 		},
 		"leafyEngine" => {
@@ -83,7 +83,7 @@ class Libs {
 			cafeLibraries: {libsArray: ["curl", "mbedtls", "mbedx509", "mbedcrypto"], skip: false}
 		},
 		"vorbis" => {
-			haxeLibraries: {libName: "hxvorbis", requirePreparation: false, skip: false},
+			haxeLibraries: {libName: "hxu_vorbis", requirePreparation: false, skip: false},
 			cafeLibraries: {libsArray: ["vorbis"], skip: false}
 		},
 		// EXPERIMENTAL:

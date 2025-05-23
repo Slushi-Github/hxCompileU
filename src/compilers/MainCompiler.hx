@@ -44,14 +44,5 @@ class MainCompiler {
 		// First compile Haxe part and then compile Wii U part
 		HaxeCompiler.init();
 		CafeCompiler.init();
-
-		/**
-		 * because generating the documentation before the Wii U compilation makes the Wii U compilation fail, 
-		 * we will compile it after that only if the Haxe compilation was successful (obviously).
-		 */
-		if (HaxeCompiler.getExitCode() == 0 && CafeCompiler.getExitCode() == 0 && JsonFile.getJson().haxeConfig.generateDoxDocs) {
-			SlushiUtils.printMsg("Generating Haxe documentation...", INFO, "\n");
-			HaxeCompiler.init(true);
-		}
 	}
 }

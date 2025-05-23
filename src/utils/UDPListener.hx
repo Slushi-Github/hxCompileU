@@ -20,6 +20,7 @@ class UDPListener {
 		try {
 			socket.bind(host, udpPort);
 			SlushiUtils.printMsg('Listening in [$host:$udpPort] by UDP...', INFO);
+			SlushiUtils.printMsg('------------------', NONE);
 
 			while (true) {
                 var arrayData = new Array<cpp.UInt8>();
@@ -31,13 +32,15 @@ class UDPListener {
 					var clientPort = udpPort;
 
 					var receivedString = data.toString();
-					SlushiUtils.printMsg('[$clientIp:$clientPort]: $receivedString', NONE);
+					SlushiUtils.printMsg('$receivedString', NONE);
 				}
 			}
 		} catch (e:Dynamic) {
+			SlushiUtils.printMsg('------------------', NONE);
 			SlushiUtils.printMsg('\nUnknown error: $e', ERROR);
 		}
 
+		SlushiUtils.printMsg('------------------', NONE);
         socket.close();
         SlushiUtils.printMsg('Socket closed', INFO);
 	}

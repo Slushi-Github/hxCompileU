@@ -38,18 +38,24 @@ class DevKitProUtils {
 		SlushiUtils.printMsg("----------------------", NONE);
 	}
 
-	public static function sendRPX():Void {
-		var rpxPath:String = SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles/" + jsonFile.wiiuConfig.projectName
-			+ ".rpx";
-		if (!FileSystem.exists(rpxPath)) {
-			SlushiUtils.printMsg("[.rpx] file not found", ERROR);
+	public static function send():Void {
+		var filePath:String = "";
+
+		if (jsonFile.wiiuConfig.isAPlugin == true) {
+			filePath = SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles/" + jsonFile.wiiuConfig.projectName + ".wps";
+		} else {
+			filePath = SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles/" + jsonFile.wiiuConfig.projectName + ".rpx";
+		}
+
+		if (!FileSystem.exists(filePath)) {
+			SlushiUtils.printMsg("RPX or WPS file not found", ERROR);
 			return;
 		}
 
 		// remove path from the file name
-		var rpxFileName:String = Path.withoutDirectory(rpxPath);
+		var fileName:String = Path.withoutDirectory(filePath);
 
-		SlushiUtils.printMsg("Sending RPX file: [" + rpxFileName + "]", PROCESSING);
+		SlushiUtils.printMsg("Sending file: [" + fileName + "]", PROCESSING);
 
 		var devKitProToolsEnv = Sys.getEnv("DEVKITPRO");
 
@@ -66,6 +72,6 @@ class DevKitProUtils {
 			return;
 		}
 
-		Sys.command(wiiloadProgram, [rpxPath]);
+		Sys.command(wiiloadProgram, [filePath]);
 	}
 }

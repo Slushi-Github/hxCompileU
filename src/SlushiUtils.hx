@@ -79,8 +79,8 @@ class SlushiUtils {
 	}
 
 	public static function cleanBuild():Void {
-		var outDir = getPathFromCurrentTerminal() + "/" + JsonFile.getJson().haxeConfig.outDir;
-		var buildDir = getPathFromCurrentTerminal() + "/build";
+		var outDir = getPathFromCurrentTerminal() + JsonFile.getJson().haxeConfig.outDir;
+		var buildDir = getPathFromCurrentTerminal() + "build";
 
 		if (FileSystem.exists(outDir)) {
 			try {

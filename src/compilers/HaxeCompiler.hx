@@ -19,7 +19,7 @@ class HaxeCompiler {
 	static final hxmlFileName:String = "temphxml";
 	static var exitCodeNum:Int = 0;
 
-	public static function init(generateDoxDocs:Bool = false) {
+	public static function init() {
 		if (jsonFile == null) {
 			SlushiUtils.printMsg("Error loading [hxCompileUConfig.json]", ERROR);
 			return;
@@ -78,12 +78,11 @@ class HaxeCompiler {
 	# Macros
 	${generateMacro()}
 ';
-
-			if (jsonFile.haxeConfig.generateDoxDocs && generateDoxDocs) {
+			// if the project is a plugin, add the libmappedmemory library
+			if (jsonFile.wiiuConfig.isAPlugin == true) {
 				hxml += '\n
-	# Generate Dox Docs
-	-xml ${jsonFile.haxeConfig.outDir}/${jsonFile.wiiuConfig.projectName}_docs.xml
-	-D doc-gen
+	# WUPS library preparation
+	-lib hxlibmappedmemory
 ';
 			}
 
@@ -120,10 +119,6 @@ class HaxeCompiler {
 		if (compileProcess != 0) {
 			SlushiUtils.printMsg("Compilation failed", ERROR);
 			exitCodeNum = 2;
-		}
-
-		if (exitCodeNum == 0 && jsonFile.haxeConfig.generateDoxDocs && generateDoxDocs) {
-			SlushiUtils.printMsg("Haxe documentation generated successfully, use [haxelib run dox ...] to terminate the process", SUCCESS);
 		}
 
 		// delete temporal hxml and macros

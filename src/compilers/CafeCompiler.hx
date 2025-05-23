@@ -42,34 +42,70 @@ class CafeCompiler {
 
 		SlushiUtils.printMsg("Creating Makefile...", PROCESSING);
 		// Create a temporal Makefile with all required fields
-		try {
-			// Prepare Makefile
-			var makefileContent:String = Resource.getString("cafeMakefileWUT");
-			makefileContent = makefileContent.replace("[PROGRAM_VERSION]", Main.version);
-			makefileContent = makefileContent.replace("[PROJECT_NAME]", jsonFile.wiiuConfig.projectName);
-			makefileContent = makefileContent.replace("[SOURCE_DIR]", jsonFile.haxeConfig.outDir + "/src");
-			makefileContent = makefileContent.replace("[INCLUDE_DIR]", jsonFile.haxeConfig.outDir + "/include");
-			makefileContent = makefileContent.replace("[LIBS]", parseMakeLibs());
-			makefileContent = makefileContent.replace("[DEFINES]", parseMakeDefines());
 
-			if (!FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles")) {
-				FileSystem.createDirectory(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles");
+		// if the project is a plugin, create a WUPS Makefile
+		if (jsonFile.wiiuConfig.isAPlugin == true) {
+			SlushiUtils.printMsg("Creating WUPS Makefile...", PROCESSING);
+			try {
+				// Prepare Makefile
+				var makefileContent:String = Resource.getString("cafeMakefileWUPS");
+				makefileContent = makefileContent.replace("[PROGRAM_VERSION]", Main.version);
+				makefileContent = makefileContent.replace("[PROJECT_NAME]", jsonFile.wiiuConfig.projectName);
+				makefileContent = makefileContent.replace("[SOURCE_DIR]", jsonFile.haxeConfig.outDir + "/src");
+				makefileContent = makefileContent.replace("[INCLUDE_DIR]", jsonFile.haxeConfig.outDir + "/include");
+				makefileContent = makefileContent.replace("[LIBS]", parseMakeLibs());
+				makefileContent = makefileContent.replace("[DEFINES]", parseMakeDefines());
+
+				if (!FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles")) {
+					FileSystem.createDirectory(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles");
+				}
+				makefileContent = makefileContent.replace("[OUT_DIR]", jsonFile.haxeConfig.outDir + "/wiiuFiles");
+
+				// Save Makefile
+				// delete temporal makefile if already exists
+				if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/Makefile")) {
+					FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + "/Makefile");
+					SlushiUtils.printMsg("Deleted existing [Makefile]", INFO);
+				}
+
+				File.saveContent(SlushiUtils.getPathFromCurrentTerminal() + "/Makefile", makefileContent);
+				SlushiUtils.printMsg("Created Makefile", SUCCESS);
+			} catch (e:Dynamic) {
+				SlushiUtils.printMsg("Error creating Makefile: " + e, ERROR);
+				exitCodeNum = 4;
+				return;
 			}
-			makefileContent = makefileContent.replace("[OUT_DIR]", jsonFile.haxeConfig.outDir + "/wiiuFiles");
+		}
+		else { // if not a plugin, create a normal Makefile
+			try {
+				// Prepare Makefile
+				var makefileContent:String = Resource.getString("cafeMakefileWUT");
+				makefileContent = makefileContent.replace("[PROGRAM_VERSION]", Main.version);
+				makefileContent = makefileContent.replace("[PROJECT_NAME]", jsonFile.wiiuConfig.projectName);
+				makefileContent = makefileContent.replace("[SOURCE_DIR]", jsonFile.haxeConfig.outDir + "/src");
+				makefileContent = makefileContent.replace("[INCLUDE_DIR]", jsonFile.haxeConfig.outDir + "/include");
+				makefileContent = makefileContent.replace("[LIBS]", parseMakeLibs());
+				makefileContent = makefileContent.replace("[DEFINES]", parseMakeDefines());
 
-			// Save Makefile
-			// delete temporal makefile if already exists
-			if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/Makefile")) {
-				FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + "/Makefile");
-				SlushiUtils.printMsg("Deleted existing [Makefile]", INFO);
+				if (!FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles")) {
+					FileSystem.createDirectory(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles");
+				}
+				makefileContent = makefileContent.replace("[OUT_DIR]", jsonFile.haxeConfig.outDir + "/wiiuFiles");
+
+				// Save Makefile
+				// delete temporal makefile if already exists
+				if (FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/Makefile")) {
+					FileSystem.deleteFile(SlushiUtils.getPathFromCurrentTerminal() + "/Makefile");
+					SlushiUtils.printMsg("Deleted existing [Makefile]", INFO);
+				}
+
+				File.saveContent(SlushiUtils.getPathFromCurrentTerminal() + "/Makefile", makefileContent);
+				SlushiUtils.printMsg("Created Makefile", SUCCESS);
+			} catch (e:Dynamic) {
+				SlushiUtils.printMsg("Error creating Makefile: " + e, ERROR);
+				exitCodeNum = 4;
+				return;
 			}
-
-			File.saveContent(SlushiUtils.getPathFromCurrentTerminal() + "/Makefile", makefileContent);
-			SlushiUtils.printMsg("Created Makefile", SUCCESS);
-		} catch (e:Dynamic) {
-			SlushiUtils.printMsg("Error creating Makefile: " + e, ERROR);
-			exitCodeNum = 4;
-			return;
 		}
 
 		SlushiUtils.printMsg("Compiling to Wii U...\n------------------", PROCESSING);

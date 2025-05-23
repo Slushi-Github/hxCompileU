@@ -18,7 +18,6 @@ typedef HaxeConfig = {
 	hxMain:String,
 	outDir:String,
 	debugMode:Bool,
-	generateDoxDocs:Bool,
 	othersOptions:Array<String>,
 	errorReportingStyle:String,
 }
@@ -26,11 +25,7 @@ typedef HaxeConfig = {
 typedef WiiUConfig = {
 	projectName:String,
 	consoleIP:String,
-}
-
-typedef ConsoleSettings = {
-	sendProgramToConsole:Bool,
-	consoleIP:String,
+	isAPlugin:Bool,
 }
 
 typedef JsonStruct = {
@@ -77,13 +72,13 @@ class JsonFile {
 						hxMain: jsonContent.haxeConfig.hxMain,
 						outDir: jsonContent.haxeConfig.outDir,
 						debugMode: jsonContent.haxeConfig.debugMode,
-						generateDoxDocs: jsonContent.haxeConfig.generateDoxDocs,
 						othersOptions: jsonContent.haxeConfig.othersOptions,
 						errorReportingStyle: jsonContent.haxeConfig.errorReportingStyle,
 					},
 					wiiuConfig: {
 						projectName: jsonContent.wiiuConfig.projectName,
 						consoleIP: jsonContent.wiiuConfig.consoleIP,
+						isAPlugin: jsonContent.wiiuConfig.isAPlugin,
 					},
 					deleteTempFiles: jsonContent.deleteTempFiles,
 					extraLibs: jsonContent.extraLibs,
@@ -115,13 +110,13 @@ class JsonFile {
 				hxMain: "Main",
 				outDir: "output",
 				debugMode: false,
-				generateDoxDocs: false,
 				othersOptions: [],
 				errorReportingStyle: "pretty",
 			},
 			wiiuConfig: {
 				projectName: "project",
 				consoleIP: "0.0.0.0",
+				isAPlugin: false,
 			},
 			deleteTempFiles: true,
 			extraLibs: [],

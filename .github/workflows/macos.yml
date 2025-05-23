@@ -1,27 +1,29 @@
-
 name: MacOS Build
 on:
   push:
+
 jobs:
   build:
-    name: MacOS Build
-    permissions: write-all
     runs-on: macos-latest
     steps:
-      - name: Pulling the new commit
+      - name: Checkout repository
         uses: actions/checkout@v4.1.7
-      - name: Setting up Haxe
+
+      - name: Set up Haxe
         uses: krdlab/setup-haxe@master
         with:
           haxe-version: 4.3.5
-      - name: Installing/Updating libraries
-        run: |
-          haxelib --always install hxcpp 
-        shell: cmd
-      - name: Building HxCompileU
-        run: |
-          haxe build.hxml
-      - name: Uploading artifact (entire build)
+
+      - name: Install Haxe libraries
+        run: haxelib install hxcpp
+
+      - name: Compile project
+        run: haxe build.hxml
+
+      - name: Debug output
+        run: ls -la export/haxeCompileU
+
+      - name: Upload compiled artifact
         uses: actions/upload-artifact@v4.3.4
         with:
           name: Mac64_HxCompileU
