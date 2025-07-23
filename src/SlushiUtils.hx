@@ -1,3 +1,8 @@
+// Copyright (c) 2025 Andrés E. G.
+//
+// This software is licensed under the MIT License.
+// See the LICENSE file for more details.
+
 package src;
 
 using StringTools;
@@ -9,6 +14,9 @@ using StringTools;
  * Author: Slushi.
  */
 
+/**
+ * Message types for logging.
+ */
 enum MsgType {
 	INFO;
 	SUCCESS;
@@ -16,9 +24,19 @@ enum MsgType {
 	ERROR;
 	PROCESSING;
 	NONE;
+	DEBUG;
 }
 
+/**
+ * The SlushiUtils class is used to print messages, parse versions, etc.
+ */
 class SlushiUtils {
+	/**
+	 * Prints a message to the terminal.
+	 * @param text The text to print.
+	 * @param alertType The type of message.
+	 * @param prefix An optional prefix to add to the message.
+	 */
 	public static function printMsg(text:Dynamic, alertType:MsgType, prefix:String = ""):Void {
 		switch (alertType) {
 			case ERROR:
@@ -33,15 +51,27 @@ class SlushiUtils {
 				Sys.println(prefix + "\x1b[38;5;24m[PROCESSING]\033[0m " + text);
 			case NONE:
 				Sys.println(prefix + text);
+			case DEBUG:
+				Sys.println(prefix + "\x1b[38;5;5m[DEBUG]\033[0m " + text);
 			default:
 				Sys.println(text);
 		}
 	}
 
+	/**
+	 * Returns the path of the current terminal.
+	 * @return String
+	 */
 	public static function getPathFromCurrentTerminal():String {
 		return Sys.getCwd().replace("\\", "/");
 	}
 
+	/**
+	 * Parses a version string into an integer.
+	 * The version is parsed as major.minor.patch, e.g. "1.2.3" -> 10203.
+	 * @param version The version string to parse.
+	 * @return Int
+	 */
 	public static function parseVersion(version:String):Int {
 		var parts = version.split(".");
 		var major = Std.parseInt(parts[0]);
@@ -50,6 +80,11 @@ class SlushiUtils {
 		return (major * 10000) + (minor * 100) + patch; // Ej: "1.2.3" -> 10203
 	}
 
+	/**
+	 * Returns a string explaining the exit code.
+	 * @param number The exit code number.
+	 * @return String
+	 */
 	public static function getExitCodeExplanation(number:Int):String {
 		switch (number) {
 			case 1:
@@ -65,6 +100,10 @@ class SlushiUtils {
 		}
 	}
 
+	/**
+	 * Deletes a file or directory recursively.
+	 * @param path 
+	 */
 	public static function deleteRecursively(path:String):Void {
 		if (FileSystem.exists(path)) {
 			if (FileSystem.isDirectory(path)) {
@@ -78,6 +117,9 @@ class SlushiUtils {
 		}
 	}
 
+	/**
+	 * Cleans the build directory.
+	 */
 	public static function cleanBuild():Void {
 		var outDir = getPathFromCurrentTerminal() + JsonFile.getJson().haxeConfig.outDir;
 		var buildDir = getPathFromCurrentTerminal() + "build";

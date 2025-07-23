@@ -1,5 +1,12 @@
+// Copyright (c) 2025 Andrés E. G.
+//
+// This software is licensed under the MIT License.
+// See the LICENSE file for more details.
+
+
 package src.compilers;
 
+import src.utils.LibsManager;
 import src.compilers.HaxeCompiler;
 import sys.io.File;
 import sys.FileSystem;
@@ -12,11 +19,10 @@ using StringTools;
 
 /**
  * The CafeCompiler class is used to compile the project to Wii U
- * using [DevKitPro] (https://devkitpro.org) MakeFile.
+ * using [DevKitPro](https://devkitpro.org) MakeFile.
  * 
  * Author: Slushi.
  */
-
 class CafeCompiler {
 	static var jsonFile:JsonStruct = JsonFile.getJson();
 	static var exitCodeNum:Int = 0;
@@ -38,7 +44,7 @@ class CafeCompiler {
 			return;
 		}
 
-		SlushiUtils.printMsg("Trying to compile to Wii U project...", PROCESSING);
+		SlushiUtils.printMsg("Trying to compile to a Wii U project...", PROCESSING);
 
 		SlushiUtils.printMsg("Creating Makefile...", PROCESSING);
 		// Create a temporal Makefile with all required fields
@@ -75,8 +81,7 @@ class CafeCompiler {
 				exitCodeNum = 4;
 				return;
 			}
-		}
-		else { // if not a plugin, create a normal Makefile
+		} else { // if not a plugin, create a normal Makefile
 			try {
 				// Prepare Makefile
 				var makefileContent:String = Resource.getString("cafeMakefileWUT");
@@ -110,17 +115,21 @@ class CafeCompiler {
 
 		SlushiUtils.printMsg("Compiling to Wii U...\n------------------", PROCESSING);
 
-		var startTime:Float = Sys.time(); 
+		var startTime:Float = Sys.time();
 		var compileProcess = Sys.command("make");
 
-		SlushiUtils.printMsg("------------------", NONE);
+		if (compileProcess != 0) {
+			SlushiUtils.printMsg("\x1b[38;5;1m------------------\033[0m", NONE);
+		} else {
+			SlushiUtils.printMsg("\x1b[38;5;71m------------------\033[0m", NONE);
+		}
 
-		var endTime:Float = Sys.time(); 
-		var elapsedTime:Float = endTime - startTime; 
+		var endTime:Float = Sys.time();
+		var elapsedTime:Float = endTime - startTime;
 		var formattedTime:String = StringTools.trim(Math.fround(elapsedTime * 10) / 10 + "s");
 
 		if (compileProcess != 0) {
-			SlushiUtils.printMsg("Compilation failed", ERROR, "\n");
+			SlushiUtils.printMsg("\x1b[38;5;19mC++\033[0m compilation failed", ERROR, "\n");
 			exitCodeNum = 2;
 		}
 
@@ -132,7 +141,8 @@ class CafeCompiler {
 		}
 
 		if (exitCodeNum == 0) {
-			SlushiUtils.printMsg('Compilation successful. Check [${jsonFile.haxeConfig.outDir}/wiiuFiles], compilation time: ${formattedTime}\n', SUCCESS, "\n");
+			SlushiUtils.printMsg('\x1b[38;5;19mC++\033[0m compilation successful. Check \033[4m[${jsonFile.haxeConfig.outDir}/wiiuFiles]\033[0m, compilation time: ${formattedTime}\n',
+				SUCCESS, "\n");
 		}
 	}
 
@@ -143,7 +153,7 @@ class CafeCompiler {
 	static function parseMakeLibs():String {
 		var libs = "";
 
-		for (lib in Libs.parseMakeLibs()) {
+		for (lib in LibsManager.parseCPPLibs()) {
 			libs += lib + " ";
 		}
 
@@ -156,6 +166,12 @@ class CafeCompiler {
 		for (define in Defines.parseCDefines()) {
 			defines += define + " ";
 		}
+
+		if (jsonFile.haxeConfig.debugMode == true) {
+			defines += "-D debug ";
+		}
+
+		defines += JsonFile.parseJSONVars();
 
 		return defines;
 	}

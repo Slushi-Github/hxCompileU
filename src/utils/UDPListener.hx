@@ -1,3 +1,9 @@
+// Copyright (c) 2025 Andrés E. G.
+//
+// This software is licensed under the MIT License.
+// See the LICENSE file for more details.
+
+
 package src.utils;
 
 import sys.net.Host;
@@ -5,8 +11,16 @@ import sys.net.Address;
 import sys.net.UdpSocket;
 import haxe.io.Bytes;
 
+/**
+ * A UDP server that listens for messages from the Wii U.
+ * 
+ * Author: Slushi.
+ */
 class UDPListener {
-	public static function start() {
+	/**
+	 * Starts the UDP listener.
+	 */
+	public static function start():Void {
 		var udpIp = "0.0.0.0";
 		var udpPort = 4405;
 		var address:Address = new Address();

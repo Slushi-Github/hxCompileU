@@ -17,6 +17,7 @@ jobs:
       - name: Installing/Updating libraries
         run: |
           haxelib --always install hxcpp 
+          haxelib --always install fuzzaldrin 
         shell: cmd
       - name: Building HxCompileU
         run: |

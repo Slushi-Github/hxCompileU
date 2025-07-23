@@ -1,9 +1,9 @@
 # HxCompileU
 ![mainImage](https://github.com/Slushi-Github/hxCompileU/blob/main/docs/readme/MainImage.png)
 
-Using this small utility you can compile code from Haxe to PowerPC and finally the Nintendo Wii U using [DevKitPro](https://devkitpro.org/) and [reflaxe.CPP](https://github.com/SomeRanDev/reflaxe.CPP), for creating homebrew for the Wii U.
+Using this small utility you can compile code from Haxe to PowerPC and finally the Nintendo Wii U using [DevKitPro](https://devkitpro.org/) and [reflaxe/C++](https://github.com/SomeRanDev/reflaxe.CPP), for creating homebrew for the Wii U.
 
-Currently supported libraries to be used in conjunction with HxCompileU:
+Officially there are supported libraries to be used in conjunction with HxCompileU:
 
 - [HxU_WUT](https://github.com/Haxe-WiiU/HxU_WUT): the toolchain or SDK used to create homebrew on the Wii U.
 - [HxU_LibNotifications](https://github.com/Haxe-WiiU/HxU_LibNotifications): a library to create notifications on the Wii U (Useful for mostly plugins).
@@ -13,8 +13,7 @@ Currently supported libraries to be used in conjunction with HxCompileU:
 - [HxU_SDL_FontCache](https://github.com/Haxe-WiiU/HxU_SDL_FontCache): SDL_FontCache @:native bindings for Haxe to do homebrew on Wii U.
 - [HxU_Jansson](https://github.com/Haxe-WiiU/HxU_Jansson): Jansson @:native bindings for Haxe to do homebrew on Wii U.
 - [HxU_Vorbis](https://github.com/Haxe-WiiU/HxU_Vorbis): Vorbis @:native bindings for Haxe to do homebrew on Wii U.
-
-- [Leafy Engine](https://github.com/Slushi-Github/leafyEngine): A 2D engine for the Wii U made with Haxe.
+- [Leafy Engine](https://github.com/Slushi-Github/leafyEngine): A 2D engine for the Wii U made with Haxe and based on [HaxeFilxel](http://haxeflixel.com/).
 
 ## How?
 The magic really comes from [reflaxe.CPP](https://github.com/SomeRanDev/reflaxe.CPP), being an alternative to [HXCPP](https://github.com/HaxeFoundation/hxcpp) when you want to compile Haxe to C++.
@@ -24,7 +23,8 @@ This project is simple... But it works!
 
 This program what it does, is that by means of some data stored in a JSON file (``hxCompileUConfig.json``), it generates a MakeFile and a [HXML](https://haxe.org/manual/compiler-usage-hxml.html) file with those data of the JSON, of normal first it will try to execute the [HXML](https://haxe.org/manual/compiler-usage-hxml.html) with Haxe, [Reflaxe/C++](https://github.com/SomeRanDev/reflaxe.CPP) is in charge of generating the C++ code, if the compilation with Haxe is successful, it executes the MakeFile with Make and starts the normal compilation of a C++ code, if this is also successful, that's it, you have your homebrew for the Nintendo Wii U made with Haxe!
 
-Currently there is only support focused on creating homebrew applications for the Wii U, but we are working on support for creating [WUPS](https://github.com/wiiu-env/WiiUPluginSystem) plugins using this utility.
+### Plugins?
+Currently there is only support focused on creating homebrew applications for the Wii U, but I are working on support for creating [WUPS](https://github.com/wiiu-env/WiiUPluginSystem) plugins using this utility, but I do not assure interest that this is entirely possible
 
 ## Why?
 Well, since I got a Nintendo Wii U a while ago I've been interested in bringing Haxe to this console. 
@@ -57,15 +57,20 @@ git clone https://github.com/Slushi-Github/hxCompileU.git
 
 # Compile the project
 cd hxCompileU
+haxelib install fuzzaldrin
 haxe build.hxml
 ```
 
 After that, you will get your executable ``haxeCompileU`` in the "export" folder, for the moment, copy it to the root of the project folder you need it.
 
+-----
 
 ## How to use
 #### First, initialize your project, that is, create the configuration JSON file that HxCompileU will use, you can create it using this command:
 ``{haxeCompileUProgram} --prepare``
+
+ - Or you can import an existing JSON file from a Haxe library with the following command:
+``{haxeCompileUProgram} --import HAXE_LIB``
 
 -----
 
@@ -77,6 +82,9 @@ After that, you will get your executable ``haxeCompileU`` in the "export" folder
 
     ``{haxeCompileUProgram} --compile --onlyHaxe``
 
+ - If you want enable the Haxe debug mode, you can use the following command:
+
+    ``{haxeCompileUProgram} --compile --debug`` or ``{haxeCompileUProgram} --compile --onlyHaxe --debug``
 
 - You can also use the following command to compile only Wii U but not Haxe:
 
@@ -103,3 +111,17 @@ After that, you will get your executable ``haxeCompileU`` in the "export" folder
 -----
 
 and that's it! if your compilation was successful on both Haxe and Wii U side, your ``.rpx`` or ``.wps`` and ``.elf`` will be in ``yourOutputFolder/wiiuFiles``.
+
+-----
+
+## WUHB conversion
+
+If you want to convert a ``.rpx`` file to a ``.wuhb`` file, you can active the  ``wiiuConfig`` -> ``convertToWUHB`` option in the ``hxCompileUConfig.json`` file and change the information in the ``wiiuConfig`` -> ``wuhbConfig`` section (name, author, etc).
+Then, in your project folder, create a folder called ``WUHB`` and put the ``icon.png`` and ``tv_image.png`` and ``drc_image.png`` files there.
+
+After that, you can compile your project using the normal ``--compile`` command, and the ``.wuhb`` file will be in the ``yourOutputFolder/wiiuFiles`` folder.
+
+-----
+
+## License
+This project is released under the [MIT license](https://github.com/Slushi-Github/hxCompileU/blob/main/LICENSE.md).

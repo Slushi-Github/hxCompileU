@@ -3,5 +3,6 @@
 -cpp export
 -D HAXE_OUTPUT_PART=haxeCompileU
 --resource templates/makefileSimpleAppWUT@cafeMakefileWUT
-# -lib hxcpp-debug-server
--D report-error-style=pretty
+--resource templates/makefileSimpleAppWUPS@cafeMakefileWUPS
+-D message.reporting=pretty
+-lib fuzzaldrin

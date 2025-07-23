@@ -1,13 +1,26 @@
+// Copyright (c) 2025 Andrés E. G.
+//
+// This software is licensed under the MIT License.
+// See the LICENSE file for more details.
+
+
 package src;
 
 import src.SlushiUtils;
 import src.compilers.MainCompiler;
 import src.utils.DevKitProUtils;
 import src.utils.UDPListener;
+import fuzzaldrin.Fuzzaldrin;
 
+/**
+ * The Main class is the entry point of the HxCompileU compiler.
+ * It handles the command line arguments and starts the compilation process.
+ * 
+ * Author: Slushi
+ */
 class Main {
 	public static var hxcompileuString = "\x1b[38;5;214mHx\033[0mCompile\x1b[38;5;74mU\033[0m";
-	public static var version:String = "1.4.0";
+	public static final version:String = "1.5.0";
 	static var stdin = Sys.stdin();
 	static var stdout = Sys.stdout();
 	static var args = Sys.args();
@@ -30,8 +43,10 @@ class Main {
 			switch (args[0]) {
 				case "--prepare":
 					JsonFile.createJson();
+				case "--import":
+					JsonFile.importJSON(args[1]);
 				case "--compile":
-					MainCompiler.start(args[1]);
+					MainCompiler.start(args[1], args[2]);
 				case "--searchProblem":
 					DevKitProUtils.searchProblem(args[1]);
 				case "--udpServer":
@@ -42,10 +57,19 @@ class Main {
 					// No need to print the version here, it's already printed at the start of the program
 					return;
 				case "--help":
-					SlushiUtils.printMsg("Usage: hxCompileU [command]\nCommands:\n\t--prepare: Creates hxCompileUConfig.json\n\t--compile: Compiles the project (use \"--compile --onlyHaxe\" for compiling only the Haxe part, \"--compile --onlyCafe\" for compiling only the Wii U part)\n\t--searchProblem: search for a line of code in the [.elf] file from a line address of some log using DevKitPro's powerpc-eabi-addr2line program\n\t--udpServer: Starts the UDP server to view logs from the Wii U\n\t--send: Sends the .rpx or .wps file to the Wii U\n\t--version: Shows the version of the compiler\n\t--help: Shows this message",
+					SlushiUtils.printMsg("Usage: haxeCompileU [command]\nCommands:\n\t--prepare: Creates hxCompileUConfig.json in the current directory.\n\t--import \033[3mHAXE_LIB\033[0m: Imports a JSON file from a Haxe lib to the current directory \n\t--compile: Compiles the project. \n\t\tUse \"--compile --onlyHaxe\" for compiling only the Haxe part. \n\t\tUse \"--compile --onlyCafe\" for compiling only the Wii U part.\n\t\tAdd \"--debug\" or \"--onlyHaxe --debug\" to enable Haxe debug mode\n\t--searchProblem \033[3mLINE_ADDRESS\033[0m: search for a line of code in the [.elf] file from a line address of some log using DevKitPro's powerpc-eabi-addr2line program\n\t--udpServer: Starts the UDP server on port 4405 to view logs from the Wii U\n\t--send: Sends the .rpx or .wps file to the Wii U\n\t--version: Shows the version of the compiler\n\t--help: Shows this message",
 						NONE);
 				default:
-					SlushiUtils.printMsg("Invalid argument: [" + args[0] + "], use --help for more information", NONE);
+					#if fuzzaldrin
+					var candidates:Array<String> = ["--prepare", "--import", "--compile", "--searchProblem", "--udpServer", "--send", "--version", "--help"];
+					var results = Fuzzaldrin.filter(candidates, args[0]);
+					if (results.length > 0)
+						stdout.writeString("Command " + args[0] + " not found. Did you mean: \033[3m\"" + results[0] + "\"\033[0m?\n");
+					else 
+						SlushiUtils.printMsg("Invalid argument: [" + args.join(" ") + "], use \033[3m--help\033[0m for more information", NONE);
+					#else
+					SlushiUtils.printMsg("Invalid argument: [" + args.join(" ") + "], use \033[3m--help\033[0m for more information", NONE);
+					#end
 					return;
 			}
 		} catch (e) {
