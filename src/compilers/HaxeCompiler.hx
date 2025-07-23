@@ -1,6 +1,12 @@
+// Copyright (c) 2025 Andrés E. G.
+//
+// This software is licensed under the MIT License.
+// See the LICENSE file for more details.
+
+
 package src.compilers;
 
-import utils.PrepareMacro;
+import src.utils.LibsManager;
 import sys.io.File;
 import sys.FileSystem;
 import src.JsonFile;
@@ -19,7 +25,9 @@ class HaxeCompiler {
 	static final hxmlFileName:String = "temphxml";
 	static var exitCodeNum:Int = 0;
 
-	public static function init() {
+	public static var forceDebugMode:Bool = false;
+
+	public static function init():Void {
 		if (jsonFile == null) {
 			SlushiUtils.printMsg("Error loading [hxCompileUConfig.json]", ERROR);
 			return;
@@ -52,7 +60,6 @@ class HaxeCompiler {
 			reportStyle = style;
 		}
 
-
 		SlushiUtils.printMsg("Trying to compile Haxe project...", PROCESSING);
 		SlushiUtils.printMsg('Creating [${hxmlFileName}.hxml]', PROCESSING);
 
@@ -64,7 +71,7 @@ class HaxeCompiler {
 	-cp ${jsonFile.haxeConfig.sourceDir}
 	-main ${jsonFile.haxeConfig.hxMain}
 	-lib reflaxe.cpp
-	-lib hxwut
+	-lib hxu_wut
 	-D cpp-output=${jsonFile.haxeConfig.outDir}
 	-D mainClass=${jsonFile.haxeConfig.hxMain}
 	-D cxx-no-null-warnings
@@ -75,14 +82,12 @@ class HaxeCompiler {
 	${finalHxDefines()}
 	# Extra options
 	${finalOtherOptions()}
-	# Macros
-	${generateMacro()}
 ';
 			// if the project is a plugin, add the libmappedmemory library
 			if (jsonFile.wiiuConfig.isAPlugin == true) {
 				hxml += '\n
 	# WUPS library preparation
-	-lib hxlibmappedmemory
+	-lib hxu_libmappedmemory
 ';
 			}
 
@@ -98,26 +103,38 @@ class HaxeCompiler {
 			return;
 		}
 
+		var debugMode:Bool = forceDebugMode ? true : (jsonFile.haxeConfig.debugMode == true);
+
 		SlushiUtils.printMsg('Created [${hxmlFileName}.hxml]', SUCCESS);
+
+		if (debugMode) {
+			SlushiUtils.printMsg("Haxe debug mode is enabled", INFO);
+		}
+
 		SlushiUtils.printMsg("Compiling Haxe project...\n------------------", PROCESSING);
 
 		var startTime:Float = Sys.time();
 
 		var compileProcess = null;
-		if (jsonFile.haxeConfig.debugMode) {
+
+		if (debugMode) {
 			compileProcess = Sys.command("haxe", ['${hxmlFileName}.hxml', '--debug']);
 		} else {
 			compileProcess = Sys.command("haxe", ['${hxmlFileName}.hxml']);
 		}
 
-		SlushiUtils.printMsg("------------------\n", NONE);
+		if (compileProcess != 0) {
+			SlushiUtils.printMsg("\x1b[38;5;1m------------------\033[0m", NONE);
+		} else {
+			SlushiUtils.printMsg("\x1b[38;5;71m------------------\033[0m", NONE);
+		}
 
 		var endTime:Float = Sys.time();
 		var elapsedTime:Float = endTime - startTime;
 		var formattedTime:String = StringTools.trim(Math.fround(elapsedTime * 10) / 10 + "s");
 
 		if (compileProcess != 0) {
-			SlushiUtils.printMsg("Compilation failed", ERROR);
+			SlushiUtils.printMsg("\x1b[38;5;178mHaxe\033[0m compilation failed", ERROR);
 			exitCodeNum = 2;
 		}
 
@@ -135,7 +152,7 @@ class HaxeCompiler {
 		}
 
 		if (exitCodeNum == 0) {
-			SlushiUtils.printMsg('Compilation successful, compilation time: ${formattedTime}\n', SUCCESS);
+			SlushiUtils.printMsg('\x1b[38;5;178mHaxe\033[0m compilation successful, compilation time: ${formattedTime}\n', SUCCESS);
 		}
 	}
 
@@ -146,7 +163,7 @@ class HaxeCompiler {
 	static function finalHxLibs():String {
 		var libs = "";
 
-		for (lib in Libs.parseHXLibs()) {
+		for (lib in LibsManager.parseHXLibs()) {
 			libs += lib + "\n\t";
 		}
 
@@ -171,28 +188,5 @@ class HaxeCompiler {
 		}
 
 		return options;
-	}
-
-	static function generateMacro():String {
-		var macroStr:String = "";
-		var checkResult:MacroFinalCheck = PrepareMacro.check();
-
-		switch (checkResult) {
-			case MACRO_ERROR:
-				SlushiUtils.printMsg("Error checking macros", ERROR);
-				return "";
-			case MACRO_SKIP:
-				return "";
-			case MACRO_OK:
-			default:
-				return "";
-		}
-		
-		for (lib in 0...PrepareMacro.libsRequiringMacrosArray.length) {
-			macroStr += "--macro " + jsonFile.haxeConfig.sourceDir + ".hxCompileUMacros.HXCU_MACRO.InitMacroFunction()\n";
-			PrepareMacro.searchLibInHaxeLibsAndSetHxFile(PrepareMacro.libsRequiringMacrosArray[lib]);
-		}
-
-		return macroStr;
 	}
 }
