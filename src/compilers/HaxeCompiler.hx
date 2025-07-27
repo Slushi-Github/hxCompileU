@@ -70,10 +70,11 @@ class HaxeCompiler {
 	# Main parameters #########
 	-cp ${jsonFile.haxeConfig.sourceDir}
 	-main ${jsonFile.haxeConfig.hxMain}
+	-D message.reporting=${reportStyle}
+	# Default and required libraries #########
 	-lib reflaxe.cpp
 	-lib hxu_wut
-	-D message.reporting=${reportStyle}
-	# Reflaxe/C++ parameters
+	# Reflaxe/C++ parameters #########
 	-D cpp-output=${jsonFile.haxeConfig.outDir}
 	-D mainClass=${jsonFile.haxeConfig.hxMain}
 	-D cxx-no-null-warnings
@@ -81,7 +82,7 @@ class HaxeCompiler {
 	-D keep-useless-exprs
 	-D cxx_callstack
 	############################
-	# Extra Libs
+	# Extra Haxe Libraries
 	${finalHxLibs()}
 	# Extra defines
 	${finalHxDefines()}
