@@ -64,8 +64,12 @@ class MainCompiler {
 		// Convert to WUHB if needed
 		if (JsonFile.getJson().wiiuConfig.convertToWUHB == true) {
 			SlushiUtils.printMsg("Converting to WUHB...", INFO);
-			DevKitProUtils.convertToWUHB();
-			SlushiUtils.printMsg("Conversion to WUHB completed.", SUCCESS);
+			if (DevKitProUtils.convertToWUHB()) {
+				SlushiUtils.printMsg("Conversion to WUHB completed.", SUCCESS);
+			}
+			else {
+				SlushiUtils.printMsg("Conversion to WUHB failed.", ERROR);
+			}
 		}
 	}
 }

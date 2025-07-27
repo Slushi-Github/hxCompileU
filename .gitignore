@@ -1,6 +1,7 @@
 # Folder
 /build
-/output
+/export
+/.haxelib
 
 # Executable file
 *.elf

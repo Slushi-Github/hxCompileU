@@ -21,7 +21,7 @@ class DevKitProUtils {
 	 * Searches for a problem in the code from a line address.
 	 * @param address The address to search for.
 	 */
-	public static function searchProblem(address:String) {
+	public static function searchProblem(address:String):Void {
 		if (address == null || address == "") {
 			SlushiUtils.printMsg("Invalid address", ERROR);
 			return;
@@ -99,12 +99,12 @@ class DevKitProUtils {
 	/**
 	 * Converts the project RPX to WUHB format.
 	 */
-	public static function convertToWUHB():Void {
+	public static function convertToWUHB():Bool {
 		var filePath:String = "";
 
 		if (!FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "WUHB")) {
 			SlushiUtils.printMsg("WUHB directory not found", ERROR);
-			return;
+			return false;
 		} else if (!FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "WUHB/icon.png")) {
 			SlushiUtils.printMsg("WUHB -> icon.png not found", WARN);
 		} else if (!FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "WUHB/tv_image.png")) {
@@ -115,14 +115,14 @@ class DevKitProUtils {
 
 		if (jsonFile.wiiuConfig.isAPlugin == true) {
 			SlushiUtils.printMsg("Cannot convert a plugin to WUHB", ERROR);
-			return;
+			return false;
 		}
 
 		if (jsonFile.wiiuConfig.wuhbConfig.author == ""
 			|| jsonFile.wiiuConfig.wuhbConfig.name == ""
 			|| jsonFile.wiiuConfig.wuhbConfig.shortName == "") {
 			SlushiUtils.printMsg("Missing WUHB configuration", ERROR);
-			return;
+			return false;
 		}
 
 		filePath = SlushiUtils.getPathFromCurrentTerminal()
@@ -134,7 +134,7 @@ class DevKitProUtils {
 
 		if (!FileSystem.exists(filePath)) {
 			SlushiUtils.printMsg("RPX file not found", ERROR);
-			return;
+			return false;
 		}
 
 		// remove path from the file name
@@ -145,6 +145,7 @@ class DevKitProUtils {
 		var devKitProToolsEnv = Sys.getEnv("DEVKITPRO");
 		var wuhbtoolProgram = devKitProToolsEnv + "/tools/bin/wuhbtool";
 
+		SlushiUtils.printMsg("----------------------", NONE);
 		Sys.command(wuhbtoolProgram, [filePath,
 			SlushiUtils.getPathFromCurrentTerminal()
 			+ jsonFile.haxeConfig.outDir
@@ -158,5 +159,8 @@ class DevKitProUtils {
 			"--tv-image=" + SlushiUtils.getPathFromCurrentTerminal() + "WUHB/tv_image.png",
 			"--drc-image=" + SlushiUtils.getPathFromCurrentTerminal() + "WUHB/drc_image.png"
 		]);
+		SlushiUtils.printMsg("----------------------", NONE);
+
+		return true;
 	}
 }
