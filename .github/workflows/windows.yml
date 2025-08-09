@@ -16,8 +16,7 @@ jobs:
           haxe-version: 4.3.5
       - name: Installing/Updating libraries
         run: |
-          haxelib --always install hxcpp 
-          haxelib --always install fuzzaldrin 
+          haxelib --always install hxcpp
         shell: cmd
       - name: Building HxCompileU
         run: |

@@ -16,8 +16,7 @@ jobs:
 
       - name: Install Haxe libraries
         run: |
-          haxelib --always install hxcpp 
-          haxelib --always install fuzzaldrin
+          haxelib --always install hxcpp
 
       - name: Compile project
         run: haxe build.hxml

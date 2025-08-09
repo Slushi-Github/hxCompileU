@@ -190,21 +190,19 @@ class JsonFile {
 		}
 
 		var defines:String = "";
-		
-		defines += "-D HXCOMPILEU_JSON_VERSION=\"" + jsonFile.programVersion + "\" ";
-		defines += "-D HXCOMPILEU_JSON_WIIU_PROJECTNAME=\"" + jsonFile.wiiuConfig.projectName + "\" ";
+
+		defines += "-D HXCOMPILEU_VERSION=\\\"" + Main.version + "\\\" ";
+		defines += "-D HXCOMPILEU_JSON_WIIU_PROJECTNAME=\\\"" + jsonFile.wiiuConfig.projectName + "\\\" ";
 
 		var dateNow:Date = Date.now();
-		var dateString = dateNow.getHours() + ":" 
-			+ StringTools.lpad(dateNow.getMinutes() + "", "0", 2) + ":" 
-			+ StringTools.lpad(dateNow.getSeconds() + "", "0", 2) + "--" 
-			+ StringTools.lpad(dateNow.getDate() + "", "0", 2) + "-" 
-			+ StringTools.lpad((dateNow.getMonth() + 1) + "", "0", 2) + "-" 
-			+ dateNow.getFullYear();
-		
-		defines += "-D HXCOMPILEU_HAXE_APPROXIMATED_COMPILATION_DATE=\"" + dateString + "\" ";
+		var dateString = dateNow.getHours() + ":" + StringTools.lpad(dateNow.getMinutes() + "", "0", 2) + ":"
+			+ StringTools.lpad(dateNow.getSeconds() + "", "0", 2) + "--" + StringTools.lpad(dateNow.getDate() + "", "0", 2) + "-"
+			+ StringTools.lpad((dateNow.getMonth() + 1) + "", "0", 2) + "-" + dateNow.getFullYear();
+
+		defines += "-D HXCOMPILEU_HAXE_APPROXIMATED_COMPILATION_DATE=\\\"" + dateString + "\\\" ";
 		return defines;
 	}
+
 
 	//////////////////////////////////////////////////////////////
 
