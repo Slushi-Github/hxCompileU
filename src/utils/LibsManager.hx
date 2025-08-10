@@ -19,10 +19,13 @@ typedef HxCULibJSONStruct = {
 	libVersion:String,
 	// Haxe things
 	haxeLibs:Array<String>,
-	// WiiU things
+	// Wii U things
 	wiiuLibs:Array<String>,
 	// Other things
 	mainDefines:Array<String>,
+	// MakeFile things
+	cDefines:Array<String>,
+	cppDefines:Array<String>
 }
 
 /**
@@ -107,6 +110,8 @@ class LibsManager {
 						haxeLibs: jsonContent.haxeLibs,
 						wiiuLibs: jsonContent.wiiuLibs,
 						mainDefines: jsonContent.mainDefines,
+						cDefines: jsonContent.cDefines,
+						cppDefines: jsonContent.cppDefines
 					},
 					hxLibName: libName,
 				});

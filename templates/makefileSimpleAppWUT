@@ -35,9 +35,9 @@ ROMFS		:=	romfs
 CFLAGS		:=	-g -Wall -O2 -ffunction-sections \
 			$(MACHDEP)
 
-CFLAGS		+=	$(INCLUDE) -D__WIIU__ -D__WUT__ [DEFINES]
+CFLAGS		+=	$(INCLUDE) -D__WIIU__ -D__WUT__ [C_DEFINES]
 
-CXXFLAGS	:=	$(CFLAGS) -std=c++17 -Wno-unused-function -Wno-unused-variable -Wno-sequence-point -Wunused-but-set-variable -Wreturn-type
+CXXFLAGS	:=	$(CFLAGS) -std=c++17 -Wno-unused-function -Wno-unused-variable -Wno-sequence-point -Wunused-but-set-variable -Wreturn-type [CPP_DEFINES]
 
 ASFLAGS		:=	-g $(MACHDEP)
 LDFLAGS		:=	-g $(MACHDEP) $(RPXSPECS) -Wl,-Map,$(notdir $*.map)

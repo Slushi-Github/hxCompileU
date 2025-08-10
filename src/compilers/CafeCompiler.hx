@@ -60,7 +60,8 @@ class CafeCompiler {
 				makefileContent = makefileContent.replace("[SOURCE_DIR]", jsonFile.haxeConfig.outDir + "/src");
 				makefileContent = makefileContent.replace("[INCLUDE_DIR]", jsonFile.haxeConfig.outDir + "/include");
 				makefileContent = makefileContent.replace("[LIBS]", parseMakeLibs());
-				makefileContent = makefileContent.replace("[DEFINES]", parseMakeDefines());
+				makefileContent = makefileContent.replace("[C_DEFINES]", parseMakeDefines().c);
+				makefileContent = makefileContent.replace("[CPP_DEFINES]", parseMakeDefines().cpp);
 
 				if (!FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles")) {
 					FileSystem.createDirectory(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles");
@@ -90,7 +91,8 @@ class CafeCompiler {
 				makefileContent = makefileContent.replace("[SOURCE_DIR]", jsonFile.haxeConfig.outDir + "/src");
 				makefileContent = makefileContent.replace("[INCLUDE_DIR]", jsonFile.haxeConfig.outDir + "/include");
 				makefileContent = makefileContent.replace("[LIBS]", parseMakeLibs());
-				makefileContent = makefileContent.replace("[DEFINES]", parseMakeDefines());
+				makefileContent = makefileContent.replace("[C_DEFINES]", parseMakeDefines().c);
+				makefileContent = makefileContent.replace("[CPP_DEFINES]", parseMakeDefines().cpp);
 
 				if (!FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles")) {
 					FileSystem.createDirectory(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles");
@@ -160,18 +162,27 @@ class CafeCompiler {
 		return libs;
 	}
 
-	static function parseMakeDefines():String {
-		var defines = "";
+	static function parseMakeDefines():{c:String, cpp:String} {
+		var defines = {c: "", cpp: ""};
 
-		for (define in Defines.parseCDefines()) {
-			defines += define + " ";
+		for (define in Defines.parseMakeFileDefines().main) {
+			defines.c += define + " ";
 		}
 
 		if (jsonFile.haxeConfig.debugMode == true) {
-			defines += "-D debug ";
+			defines.c += "-D debug ";
 		}
 
-		defines += JsonFile.parseJSONVars();
+		defines.c += JsonFile.parseJSONVars();
+
+		// These things absolutely have to go to the end.
+		for (define in Defines.parseMakeFileDefines().c) {
+			defines.c += define + " ";
+		}
+
+		for (define in Defines.parseMakeFileDefines().cpp) {
+			defines.cpp += define + " ";
+		}
 
 		return defines;
 	}

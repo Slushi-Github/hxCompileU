@@ -38,16 +38,28 @@ class Defines {
 	 * Parses the C defines from the JSON file.
 	 * @return Array<String>
 	 */
-	public static function parseCDefines():Array<String> {
-		var defines:Array<String> = [];
+	public static function parseMakeFileDefines():{main:Array<String>, c:Array<String>, cpp:Array<String>} {
+		var defines = {main: [], c: [], cpp: []};
 
 		for (define in jsonFile.projectDefines) {
-			defines.push("-D" + define);
+			defines.main.push("-D" + define);
 		}
 
 		for (lib in MainCompiler.libs) {
 			for (define in lib.libJSONData.mainDefines) {
-				defines.push("-D" + define);
+				defines.main.push("-D" + define);
+			}
+		}
+
+		for (lib in MainCompiler.libs) {
+			for (define in lib.libJSONData.cDefines) {
+				defines.c.push(define);
+			}
+		}
+
+		for (lib in MainCompiler.libs) {
+			for (define in lib.libJSONData.cppDefines) {
+				defines.cpp.push(define);
 			}
 		}
 
