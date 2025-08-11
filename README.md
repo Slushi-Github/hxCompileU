@@ -57,7 +57,6 @@ git clone https://github.com/Slushi-Github/hxCompileU.git
 
 # Compile the project
 cd hxCompileU
-haxelib install fuzzaldrin
 haxe build.hxml
 ```
 

@@ -12,6 +12,7 @@ import sys.FileSystem;
 import src.JsonFile;
 import src.SlushiUtils;
 import src.Main;
+import src.utils.Defines;
 
 /**
  * The Haxe compiler, a class that handles the compilation of Haxe projects using

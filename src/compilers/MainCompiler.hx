@@ -9,8 +9,10 @@ package src.compilers;
 import src.SlushiUtils;
 import src.compilers.CafeCompiler;
 import src.compilers.HaxeCompiler;
-
 import src.utils.LibsManager;
+import src.JsonFile;
+import src.utils.DevKitProUtils;
+import src.Main;
 
 using StringTools;
 

@@ -9,6 +9,8 @@ package src.utils;
 import haxe.Json;
 import sys.io.File;
 import sys.FileSystem;
+import src.JsonFile;
+import src.compilers.MainCompiler;
 
 using StringTools;
 

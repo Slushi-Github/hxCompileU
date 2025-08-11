@@ -6,6 +6,9 @@
 
 package src.utils;
 
+import src.JsonFile;
+import src.compilers.MainCompiler;
+
 /**
  * The Defines class is used to parse the defines that are required by the project.
  * 

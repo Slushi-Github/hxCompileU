@@ -7,6 +7,7 @@
 package src.utils;
 
 import haxe.io.Path;
+import sys.FileSystem;
 import src.JsonFile;
 
 /**
