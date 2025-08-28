@@ -19,6 +19,8 @@ using StringTools;
  */
 typedef HxCULibJSONStruct = {
 	libVersion:String,
+	// Custom UDP port for HxCU UDP server
+	customUDPPort:String,
 	// Haxe things
 	haxeLibs:Array<String>,
 	// Wii U things
@@ -109,6 +111,7 @@ class LibsManager {
 				libs.push({
 					libJSONData: {
 						libVersion: jsonContent.libVersion,
+						customUDPPort: jsonContent.customUDPPort,
 						haxeLibs: jsonContent.haxeLibs,
 						wiiuLibs: jsonContent.wiiuLibs,
 						mainDefines: jsonContent.mainDefines,

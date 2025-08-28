@@ -45,11 +45,11 @@ class CafeCompiler {
 			return;
 		}
 
-		SlushiUtils.printMsg("Trying to compile to a Wii U project...", PROCESSING);
+		SlushiUtils.printMsg("Trying to compile to a \x1b[38;5;74mWii U\033[0m project -> \x1b[38;5;110m[" + jsonFile.wiiuConfig.projectName + "]\033[0m...", PROCESSING);
 
 		SlushiUtils.printMsg("Creating Makefile...", PROCESSING);
+		
 		// Create a temporal Makefile with all required fields
-
 		// if the project is a plugin, create a WUPS Makefile
 		if (jsonFile.wiiuConfig.isAPlugin == true) {
 			SlushiUtils.printMsg("Creating WUPS Makefile...", PROCESSING);
@@ -63,6 +63,7 @@ class CafeCompiler {
 				makefileContent = makefileContent.replace("[LIBS]", parseMakeLibs());
 				makefileContent = makefileContent.replace("[C_DEFINES]", parseMakeDefines().c);
 				makefileContent = makefileContent.replace("[CPP_DEFINES]", parseMakeDefines().cpp);
+				// makefileContent = makefileContent.replace("[ROMFS_DIR]", SlushiUtils.getPathFromCurrentTerminal() + "ROMFS_ASSETS");
 
 				if (!FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles")) {
 					FileSystem.createDirectory(SlushiUtils.getPathFromCurrentTerminal() + "/" + jsonFile.haxeConfig.outDir + "/wiiuFiles");
@@ -172,6 +173,10 @@ class CafeCompiler {
 
 		if (jsonFile.haxeConfig.debugMode == true) {
 			defines.c += "-D debug ";
+		}
+
+		if (jsonFile.wiiuConfig.convertToWUHB == true) {
+			defines.c += "-D WUHB_CONVERTED";
 		}
 
 		defines.c += JsonFile.parseJSONVars();

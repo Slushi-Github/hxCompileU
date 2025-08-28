@@ -61,7 +61,7 @@ class HaxeCompiler {
 			reportStyle = style;
 		}
 
-		SlushiUtils.printMsg("Trying to compile Haxe project...", PROCESSING);
+		SlushiUtils.printMsg("Trying to compile Haxe project with \x1b[38;5;214mReflaxe\033[0m/\x1b[38;5;25mC++\033[0m...", PROCESSING);
 		SlushiUtils.printMsg('Creating [${hxmlFileName}.hxml]', PROCESSING);
 
 		// make a temporal HXML

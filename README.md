@@ -23,14 +23,14 @@ By default, if you would try to make Haxe with [HXCPP](https://github.com/HaxeFo
 
 This program what it does, is that by means of some data stored in a JSON file (``hxCompileUConfig.json``), it generates a MakeFile and a [HXML](https://haxe.org/manual/compiler-usage-hxml.html) file with those data of the JSON, of normal first it will try to execute the [HXML](https://haxe.org/manual/compiler-usage-hxml.html) with Haxe, [Reflaxe/C++](https://github.com/SomeRanDev/reflaxe.CPP) is in charge of generating the C++ code, if the compilation with Haxe is successful, it executes the MakeFile with Make and starts the normal compilation of a C++ code, if this is also successful, that's it, you have your homebrew for the Nintendo Wii U made with Haxe!
 
+### Plugins?
+Currently there is only support focused on creating homebrew applications for the Wii U, but I are working on support for creating [WUPS](https://github.com/wiiu-env/WiiUPluginSystem) plugins using this utility, but I do not assure interest that this is entirely possible
+
 ## Why?
 Well, since I got a Nintendo Wii U a while ago I've been interested in bringing Haxe to this console. 
 Officially it's not possible mainly due to Nintendo NDA (Non-Disclosure Agreement) issues, and that actually it can't even be developed for this console anymore.
 
 So... why not experiment to do it taking advantage of the homebrew that exists for the Wii U? hehe! well this is the project for it!
-
-### Plugins?
-Currently there is only support focused on creating homebrew applications for the Wii U, but I are working on support for creating [WUPS](https://github.com/wiiu-env/WiiUPluginSystem) plugins using this utility, but I do not assure interest that this is entirely possible
 
 -----
 
@@ -108,6 +108,10 @@ After that, you will get your executable ``haxeCompileU`` in the "export" folder
 
 ``{haxeCompileUProgram} --udpServer``
 
+ - If you want to use a different port (By default it's ``4405``) from a Haxe library, you can use the following command:
+
+    ``{haxeCompileUProgram} --udpServer HAXE_LIB``
+
 -----
 
 and that's it! if your compilation was successful on both Haxe and Wii U side, your ``.rpx`` or ``.wps`` and ``.elf`` will be in ``yourOutputFolder/wiiuFiles``.
@@ -120,6 +124,14 @@ If you want to convert a ``.rpx`` file to a ``.wuhb`` file, you can active the  
 Then, in your project folder, create a folder called ``WUHB`` and put the ``icon.png`` and ``tv_image.png`` and ``drc_image.png`` files there.
 
 After that, you can compile your project using the normal ``--compile`` command, and the ``.wuhb`` file will be in the ``yourOutputFolder/wiiuFiles`` folder.
+
+### About RomFS
+
+When you convert your project to a WUHB file, you gain the ability to use RomFS, which allows you to host and use assets such as images that are inside your WUHB file in your project, bypassing the need for them to be on the Wii U SD card.
+
+When the option ``wiiuConfig`` -> ``convertToWUHB`` is enabled in your ``hxCompileUConfig.json`` file, if the ``ROMFS_ASSETS`` folder exists, it will be imported and used during the conversion from ``.rpx`` to ``.wuhb``.
+
+__**This has not yet been tested!**__ ... Maybe it could work with simple ``.rpx`` files? I don't know, the changes have been made, but they haven't been tested either.
 
 -----
 

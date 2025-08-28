@@ -102,6 +102,7 @@ class DevKitProUtils {
 	 */
 	public static function convertToWUHB():Bool {
 		var filePath:String = "";
+		var assetsFolderExists:Bool = true;
 
 		if (!FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "WUHB")) {
 			SlushiUtils.printMsg("WUHB directory not found", ERROR);
@@ -112,6 +113,15 @@ class DevKitProUtils {
 			SlushiUtils.printMsg("WUHB -> tv_image.png not found", WARN);
 		} else if (!FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "WUHB/drc_image.png")) {
 			SlushiUtils.printMsg("WUHB -> drc_image.png not found", WARN);
+		}
+
+		if (!FileSystem.exists(SlushiUtils.getPathFromCurrentTerminal() + "ROMFS_ASSETS")) {
+			SlushiUtils.printMsg("ROMFS_ASSETS directory not found", WARN);
+			assetsFolderExists = false;
+		}
+		else if (!FileSystem.isDirectory(SlushiUtils.getPathFromCurrentTerminal() + "ROMFS_ASSETS")) {
+			SlushiUtils.printMsg("ROMFS_ASSETS is not a directory", WARN);
+			assetsFolderExists = false;
 		}
 
 		if (jsonFile.wiiuConfig.isAPlugin == true) {
@@ -146,8 +156,7 @@ class DevKitProUtils {
 		var devKitProToolsEnv = Sys.getEnv("DEVKITPRO");
 		var wuhbtoolProgram = devKitProToolsEnv + "/tools/bin/wuhbtool";
 
-		SlushiUtils.printMsg("----------------------", NONE);
-		Sys.command(wuhbtoolProgram, [filePath,
+		var programArgs:Array<String> = [filePath,
 			SlushiUtils.getPathFromCurrentTerminal()
 			+ jsonFile.haxeConfig.outDir
 			+ "/wiiuFiles/"
@@ -159,7 +168,14 @@ class DevKitProUtils {
 			"--icon=" + SlushiUtils.getPathFromCurrentTerminal() + "WUHB/icon.png",
 			"--tv-image=" + SlushiUtils.getPathFromCurrentTerminal() + "WUHB/tv_image.png",
 			"--drc-image=" + SlushiUtils.getPathFromCurrentTerminal() + "WUHB/drc_image.png"
-		]);
+		];
+
+		if (assetsFolderExists) {
+			programArgs.push("--content=" + SlushiUtils.getPathFromCurrentTerminal() + "ROMFS_ASSETS");
+		}
+
+		SlushiUtils.printMsg("----------------------", NONE);
+		Sys.command(wuhbtoolProgram, programArgs);
 		SlushiUtils.printMsg("----------------------", NONE);
 
 		return true;

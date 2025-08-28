@@ -108,6 +108,10 @@ class MainCompiler {
 			SlushiUtils.printMsg("The current project is configured as a plugin, this is an experimental feature! It may not work as expected.", WARN);
 		}
 
+		if (JsonFile.getJson().wiiuConfig.convertToWUHB == true) {
+			SlushiUtils.printMsg("The current project is being converted to a WUHB file, you can use RomFS!", INFO);
+		}
+
 		if (arg2.toLowerCase() == "--debug" || (arg2 == "--onlyHaxe" && arg3.toLowerCase() == "--debug")) {
 			HaxeCompiler.forceDebugMode = true;
 		}

@@ -27,7 +27,7 @@ TARGET		:=  [PROJECT_NAME]
 BUILD		:=	build
 SOURCES		:=	[SOURCE_DIR]
 INCLUDES	:=	[INCLUDE_DIR]
-ROMFS		:=	romfs
+ROMFS		:=	[ROMFS_DIR]
 
 #-------------------------------------------------------------------------------
 # options for code generation
