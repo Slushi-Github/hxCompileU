@@ -12,6 +12,7 @@ import sys.net.UdpSocket;
 import haxe.io.Bytes;
 import haxe.Json;
 import sys.FileSystem;
+import sys.io.File;
 
 import src.SlushiUtils;
 
