@@ -117,7 +117,7 @@ class CafeCompiler {
 			}
 		}
 
-		SlushiUtils.printMsg("Compiling to Wii U...\n------------------", PROCESSING);
+		SlushiUtils.printMsg("Compiling to PowerPC/\x1b[38;5;74mWii U\033[0m...\n------------------", PROCESSING);
 
 		var startTime:Float = Sys.time();
 		var compileProcess = Sys.command("make");
@@ -133,7 +133,7 @@ class CafeCompiler {
 		var formattedTime:String = StringTools.trim(Math.fround(elapsedTime * 10) / 10 + "s");
 
 		if (compileProcess != 0) {
-			SlushiUtils.printMsg("\x1b[38;5;19mC++\033[0m compilation failed", ERROR, "\n");
+			SlushiUtils.printMsg("\x1b[38;5;25mC++\033[0m compilation failed", ERROR, "\n");
 			exitCodeNum = 2;
 		}
 
@@ -145,7 +145,7 @@ class CafeCompiler {
 		}
 
 		if (exitCodeNum == 0) {
-			SlushiUtils.printMsg('\x1b[38;5;19mC++\033[0m compilation successful. Check \033[4m[${jsonFile.haxeConfig.outDir}/wiiuFiles]\033[0m, compilation time: ${formattedTime}\n',
+			SlushiUtils.printMsg('\x1b[38;5;25mC++\033[0m compilation successful. Check \033[4m[${jsonFile.haxeConfig.outDir}/wiiuFiles]\033[0m, compilation time: ${formattedTime}\n',
 				SUCCESS, "\n");
 		}
 	}

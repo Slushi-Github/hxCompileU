@@ -19,7 +19,7 @@ import src.utils.UDPListener;
  */
 class Main {
 	public static var hxcompileuString = "\x1b[38;5;214mHx\033[0mCompile\x1b[38;5;74mU\033[0m";
-	public static final version:String = "1.5.4";
+	public static final version:String = "1.5.5";
 	static var stdin = Sys.stdin();
 	static var stdout = Sys.stdout();
 	static var args = Sys.args();

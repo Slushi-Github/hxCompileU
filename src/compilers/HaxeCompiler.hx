@@ -23,8 +23,9 @@ import src.utils.Defines;
 
 class HaxeCompiler {
 	static var jsonFile:JsonStruct = JsonFile.getJson();
-	static final hxmlFileName:String = "temphxml";
 	static var exitCodeNum:Int = 0;
+
+	static final hxmlFileName:String = "temphxml";
 
 	public static var forceDebugMode:Bool = false;
 
@@ -118,7 +119,7 @@ class HaxeCompiler {
 			SlushiUtils.printMsg("Haxe debug mode is enabled", INFO);
 		}
 
-		SlushiUtils.printMsg("Compiling Haxe project...\n------------------", PROCESSING);
+		SlushiUtils.printMsg("Compiling \x1b[38;5;214mHaxe\033[0m project...\n------------------", PROCESSING);
 
 		var startTime:Float = Sys.time();
 
@@ -141,7 +142,7 @@ class HaxeCompiler {
 		var formattedTime:String = StringTools.trim(Math.fround(elapsedTime * 10) / 10 + "s");
 
 		if (compileProcess != 0) {
-			SlushiUtils.printMsg("\x1b[38;5;178mHaxe\033[0m compilation failed", ERROR);
+			SlushiUtils.printMsg("\x1b[38;5;214mHaxe\033[0m compilation failed", ERROR);
 			exitCodeNum = 2;
 		}
 
@@ -159,7 +160,7 @@ class HaxeCompiler {
 		}
 
 		if (exitCodeNum == 0) {
-			SlushiUtils.printMsg('\x1b[38;5;178mHaxe\033[0m compilation successful, compilation time: ${formattedTime}\n', SUCCESS);
+			SlushiUtils.printMsg('\x1b[38;5;214mHaxe\033[0m compilation successful, compilation time: ${formattedTime}\n', SUCCESS);
 		}
 	}
 
